@@ -1,0 +1,20 @@
+package com.jlroberts.flixat.data.local
+
+import androidx.paging.PagingSource
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+
+@Dao
+interface MovieListResultDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(movieList: List<MovieListResultDB>)
+
+    @Query("SELECT * FROM movielistresultdb ORDER BY id ASC")
+    fun getMovies(): PagingSource<Int, MovieListResultDB>
+
+    @Query("DELETE FROM movielistresultdb")
+    suspend fun clearAll()
+}
