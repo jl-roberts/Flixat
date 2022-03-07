@@ -14,12 +14,27 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_graph" />
 
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:fabAlignmentMode="end">
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav"
             app:menu="@menu/bottom_nav_menu"
-            android:layout_gravity="bottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+        </com.google.android.material.bottomappbar.BottomAppBar>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@id/bottom_app_bar"
+            app:srcCompat="@drawable/ic_search_24"
+            android:contentDescription="@string/search" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

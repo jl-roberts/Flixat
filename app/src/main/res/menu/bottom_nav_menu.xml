@@ -8,4 +8,7 @@
         android:id="@+id/nowPlayingFragment"
         android:icon="@drawable/ic_baseline_movies_24"
         android:title="@string/in_theaters" />
+    <item
+        android:id="@+id/placeholder"
+        android:title="" />
 </menu>
