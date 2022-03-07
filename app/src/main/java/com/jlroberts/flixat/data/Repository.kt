@@ -9,4 +9,5 @@ interface Repository {
 
     val popularMovies: Flow<PagingData<MovieListResultDB>>
     val inTheaters: Flow<PagingData<MovieListResult>>
+    fun search(query: String): Flow<PagingData<MovieListResult>>
 }

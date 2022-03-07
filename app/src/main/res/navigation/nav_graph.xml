@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/popularFragment"
         android:name="com.jlroberts.flixat.ui.popular.PopularFragment"
-        android:label="Popular" >
+        android:label="Flixat" >
         <action
             android:id="@+id/action_feedFragment_to_detailFragment"
             app:destination="@id/detailFragment" />

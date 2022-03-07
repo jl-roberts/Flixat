@@ -17,6 +17,12 @@ interface MoviesApi {
         @Query("language") language: String?
     ): RemoteMovieListResponse
 
+    @GET("search/movie/")
+    suspend fun search(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+    ): RemoteMovieListResponse
+
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/3/"
     }

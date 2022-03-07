@@ -11,6 +11,7 @@ import com.jlroberts.flixat.data.remote.MoviesApi
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.paging.MovieListRemoteMediator
 import com.jlroberts.flixat.domain.paging.NowPlayingPagingSource
+import com.jlroberts.flixat.domain.paging.SearchPagingSource
 import com.jlroberts.flixat.utils.MOVIES_PAGE_SIZE
 import kotlinx.coroutines.flow.Flow
 
@@ -30,7 +31,6 @@ class RepositoryImpl(
         remoteMediator = remoteMediator
     ).flow
 
-    @OptIn(ExperimentalPagingApi::class)
     override val inTheaters: Flow<PagingData<MovieListResult>>
         get() = Pager(
             config = PagingConfig(
@@ -39,4 +39,12 @@ class RepositoryImpl(
             ),
             pagingSourceFactory = { NowPlayingPagingSource(moviesApi) },
         ).flow
+
+    override fun search(query: String) = Pager(
+        config = PagingConfig(
+            pageSize = MOVIES_PAGE_SIZE,
+            enablePlaceholders = true
+        ),
+        pagingSourceFactory = { SearchPagingSource(moviesApi, query) }
+    ).flow
 }

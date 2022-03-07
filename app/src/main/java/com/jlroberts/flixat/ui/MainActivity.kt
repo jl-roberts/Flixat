@@ -1,27 +1,46 @@
 package com.jlroberts.flixat.ui
 
 import android.os.Bundle
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavHost
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.paging.PagingData
+import androidx.recyclerview.widget.GridLayoutManager
+import coil.ImageLoader
 import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.ActivityMainBinding
+import com.jlroberts.flixat.ui.common.MovieAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import logcat.logcat
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var imageLoader: ImageLoader
+
     private lateinit var binding: ActivityMainBinding
+    private val viewModel by viewModels<MainViewModel>()
+
+    private lateinit var searchAdapter: MovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -29,5 +48,78 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(binding.bottomNav, navController)
         binding.bottomNav.background = null
 
+        setupRecyclerView()
+        setupListeners()
+        setupObservers()
+    }
+
+    private fun setupRecyclerView() {
+        searchAdapter = MovieAdapter(imageLoader) { movie ->
+            // on click
+        }
+        binding.rvSearch.apply {
+            adapter = searchAdapter
+            layoutManager = GridLayoutManager(this@MainActivity, 3)
+            hasFixedSize()
+        }
+    }
+
+    private fun setupListeners() {
+        binding.etSearch.doOnTextChanged { charSequence: CharSequence?, _, _, _ ->
+            viewModel.search(charSequence.toString())
+        }
+        binding.searchFab.setOnClickListener {
+            viewModel.onSearchFabClicked()
+        }
+    }
+
+    private fun setupObservers() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchResults.collectLatest { searchResults ->
+                    searchAdapter.submitData(searchResults)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchActive.collect { searchActive ->
+                    logcat { "lifecyclescope detected fab click" }
+                    if (searchActive) {
+                        onSearchActivated()
+                    } else {
+                        onSearchDeactivated()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onSearchActivated() {
+        binding.searchResults.visibility = View.VISIBLE
+        binding.searchFab.setImageDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.ic_baseline_cancel_24
+            )
+        )
+    }
+
+    private fun onSearchDeactivated() {
+        clearSearch()
+        binding.searchResults.visibility = View.GONE
+        binding.searchFab.setImageDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.ic_search_24
+            )
+        )
+    }
+
+    private fun clearSearch() {
+        lifecycleScope.launch {
+            searchAdapter.submitData(PagingData.empty())
+            binding.etSearch.text?.clear()
+        }
     }
 }

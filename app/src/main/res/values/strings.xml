@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Flixat</string>
     <string name="popular">Popular</string>
-    <string name="in_theaters">In theaters</string>
+    <string name="now_playing">Now playing</string>
     <string name="search">Search</string>
 </resources>
