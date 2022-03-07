@@ -1,4 +1,4 @@
-package com.jlroberts.flixat.ui.feed
+package com.jlroberts.flixat.ui.nowplaying
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -15,29 +15,30 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.ImageLoader
-import com.jlroberts.flixat.databinding.FragmentFeedBinding
+import com.jlroberts.flixat.databinding.FragmentNowplayingBinding
+import com.jlroberts.flixat.ui.common.MovieAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeedFragment : Fragment() {
+class NowPlayingFragment : Fragment() {
 
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    private lateinit var binding: FragmentFeedBinding
-    private val viewModel by viewModels<FeedViewModel>()
+    private lateinit var binding: FragmentNowplayingBinding
+    private val viewModel by viewModels<NowPlayingViewModel>()
 
-    private lateinit var feedAdapter: MovieAdapter
+    private lateinit var nowPlayingAdapter: MovieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFeedBinding.inflate(inflater)
+        binding = FragmentNowplayingBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
@@ -54,16 +55,16 @@ class FeedFragment : Fragment() {
     }
 
     private fun setupFeedList() {
-        feedAdapter = MovieAdapter(imageLoader) { movie ->
+        nowPlayingAdapter = MovieAdapter(imageLoader) { movie ->
             // on click
         }
         binding.recyclerView.apply {
-            adapter = feedAdapter
+            adapter = nowPlayingAdapter
             layoutManager = GridLayoutManager(requireContext(), 3)
             hasFixedSize()
         }
         binding.feedRefresh.setOnRefreshListener {
-            feedAdapter.refresh()
+            nowPlayingAdapter.refresh()
         }
     }
 
@@ -72,7 +73,7 @@ class FeedFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movies.collectLatest { movies ->
-                    feedAdapter.submitData(movies)
+                    nowPlayingAdapter.submitData(movies)
                     binding.feedRefresh.isRefreshing = false
                 }
             }

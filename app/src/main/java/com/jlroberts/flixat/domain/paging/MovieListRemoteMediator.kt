@@ -56,7 +56,7 @@ class MovieListRemoteMediator(
         }
         try {
             val response = moviesApi.getPopularMovies(loadKey)
-            val endOfPaginationReached = response.movieListResultObjects.isEmpty()
+            val endOfPaginationReached = response.movieListResults.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.movieRemoteKeysDao().clearAll()
@@ -64,7 +64,7 @@ class MovieListRemoteMediator(
                 }
                 val prevKey = if (loadKey == 1) null else loadKey - 1
                 val nextKey = if (endOfPaginationReached) null else loadKey + 1
-                val keys = response.movieListResultObjects.map {
+                val keys = response.movieListResults.map {
                     MovieRemoteKey(movieId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 database.movieRemoteKeysDao().insertAll(keys)

@@ -8,7 +8,9 @@ import com.jlroberts.flixat.data.Repository
 import com.jlroberts.flixat.data.local.FlixatDatabase
 import com.jlroberts.flixat.data.local.MovieListResultDB
 import com.jlroberts.flixat.data.remote.MoviesApi
+import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.paging.MovieListRemoteMediator
+import com.jlroberts.flixat.domain.paging.NowPlayingPagingSource
 import com.jlroberts.flixat.utils.MOVIES_PAGE_SIZE
 import kotlinx.coroutines.flow.Flow
 
@@ -19,7 +21,7 @@ class RepositoryImpl(
 ) : Repository {
 
     @OptIn(ExperimentalPagingApi::class)
-    override val popularMovies = Pager(
+    override val popularMovies get() = Pager(
         config = PagingConfig(
             pageSize = MOVIES_PAGE_SIZE,
             enablePlaceholders = true
@@ -27,4 +29,14 @@ class RepositoryImpl(
         pagingSourceFactory = { database.movieListResultDao().getMovies() },
         remoteMediator = remoteMediator
     ).flow
+
+    @OptIn(ExperimentalPagingApi::class)
+    override val inTheaters: Flow<PagingData<MovieListResult>>
+        get() = Pager(
+            config = PagingConfig(
+                pageSize = MOVIES_PAGE_SIZE,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { NowPlayingPagingSource(moviesApi) },
+        ).flow
 }

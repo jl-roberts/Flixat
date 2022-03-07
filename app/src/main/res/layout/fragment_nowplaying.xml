@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.jlroberts.flixat.ui.feed.FeedViewModel" />
+            type="com.jlroberts.flixat.ui.nowplaying.NowPlayingViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

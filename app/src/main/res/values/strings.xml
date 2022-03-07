@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Flixat</string>
+    <string name="popular">Popular</string>
+    <string name="in_theaters">In theaters</string>
 </resources>

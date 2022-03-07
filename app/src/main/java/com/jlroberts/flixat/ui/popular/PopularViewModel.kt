@@ -1,4 +1,4 @@
-package com.jlroberts.flixat.ui.feed
+package com.jlroberts.flixat.ui.popular
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class PopularViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private val _movies = MutableStateFlow<PagingData<MovieListResult>>(PagingData.empty())
     val movies = _movies.asStateFlow()

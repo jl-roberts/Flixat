@@ -1,4 +1,4 @@
-package com.jlroberts.flixat.ui.feed
+package com.jlroberts.flixat.ui.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
