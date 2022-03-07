@@ -8,6 +8,10 @@ import com.jlroberts.flixat.data.Repository
 import com.jlroberts.flixat.data.local.FlixatDatabase
 import com.jlroberts.flixat.data.local.MovieListResultDB
 import com.jlroberts.flixat.data.remote.MoviesApi
+import com.jlroberts.flixat.data.remote.model.RemoteDetailMovie
+import com.jlroberts.flixat.data.remote.model.RemoteMovieCredit
+import com.jlroberts.flixat.data.remote.model.RemoteTrailersResponse
+import com.jlroberts.flixat.data.remote.model.RemoteWatchProviderResponse
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.paging.MovieListRemoteMediator
 import com.jlroberts.flixat.domain.paging.NowPlayingPagingSource
@@ -47,4 +51,20 @@ class RepositoryImpl(
         ),
         pagingSourceFactory = { SearchPagingSource(moviesApi, query) }
     ).flow
+
+    override suspend fun getMovieById(movieId: Long): RemoteDetailMovie {
+        return moviesApi.getMovieById(movieId)
+    }
+
+    override suspend fun getCast(movieId: Long): RemoteMovieCredit {
+        return moviesApi.getCredits(movieId)
+    }
+
+    override suspend fun getVideos(movieId: Long): RemoteTrailersResponse {
+        return moviesApi.getVideos(movieId)
+    }
+
+    override suspend fun getWatchProviders(movidId: Long): RemoteWatchProviderResponse {
+        return moviesApi.getWatchProviders(movidId)
+    }
 }

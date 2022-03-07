@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import coil.ImageLoader
 import com.jlroberts.flixat.databinding.FragmentNowplayingBinding
 import com.jlroberts.flixat.ui.common.MovieAdapter
+import com.jlroberts.flixat.ui.popular.PopularFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -56,7 +57,11 @@ class NowPlayingFragment : Fragment() {
 
     private fun setupFeedList() {
         nowPlayingAdapter = MovieAdapter(imageLoader) { movie ->
-            // on click
+            findNavController().navigate(
+                PopularFragmentDirections.actionFeedFragmentToDetailFragment(
+                    movie.movieId
+                )
+            )
         }
         binding.recyclerView.apply {
             adapter = nowPlayingAdapter

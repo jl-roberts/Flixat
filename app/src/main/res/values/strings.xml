@@ -3,4 +3,5 @@
     <string name="popular">Popular</string>
     <string name="now_playing">Now playing</string>
     <string name="search">Search</string>
+    <string name="runtime_format">%s min</string>
 </resources>

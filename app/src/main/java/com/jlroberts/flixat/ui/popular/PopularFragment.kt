@@ -56,7 +56,11 @@ class PopularFragment : Fragment() {
 
     private fun setupFeedList() {
         feedAdapter = MovieAdapter(imageLoader) { movie ->
-            // on click
+            findNavController().navigate(
+                PopularFragmentDirections.actionFeedFragmentToDetailFragment(
+                    movie.movieId
+                )
+            )
         }
         binding.recyclerView.apply {
             adapter = feedAdapter

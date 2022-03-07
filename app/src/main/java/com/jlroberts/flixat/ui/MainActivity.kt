@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.paging.PagingData
@@ -18,6 +19,7 @@ import coil.ImageLoader
 import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.ActivityMainBinding
 import com.jlroberts.flixat.ui.common.MovieAdapter
+import com.jlroberts.flixat.ui.popular.PopularFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel>()
 
     private lateinit var searchAdapter: MovieAdapter
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.bottomNav, navController)
         binding.bottomNav.background = null
 
@@ -55,7 +58,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         searchAdapter = MovieAdapter(imageLoader) { movie ->
-            // on click
+            navController.navigate(
+                PopularFragmentDirections.actionFeedFragmentToDetailFragment(
+                    movie.movieId
+                )
+            )
         }
         binding.rvSearch.apply {
             adapter = searchAdapter
@@ -70,6 +77,20 @@ class MainActivity : AppCompatActivity() {
         }
         binding.searchFab.setOnClickListener {
             viewModel.onSearchFabClicked()
+        }
+        navController.addOnDestinationChangedListener { controller, destination, bundle ->
+            when (destination.id) {
+                R.id.detailFragment -> {
+                    binding.bottomNav.visibility = View.GONE
+                    binding.bottomAppBar.visibility = View.GONE
+                    binding.searchFab.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomAppBar.visibility = View.VISIBLE
+                    binding.bottomNav.visibility = View.VISIBLE
+                    binding.searchFab.visibility = View.VISIBLE
+                }
+            }
         }
     }
 
@@ -121,5 +142,10 @@ class MainActivity : AppCompatActivity() {
             searchAdapter.submitData(PagingData.empty())
             binding.etSearch.text?.clear()
         }
+    }
+
+    fun hideBottomBar() {
+        binding.bottomAppBar.visibility = View.GONE
+        binding.bottomNav.visibility = View.VISIBLE
     }
 }
