@@ -41,15 +41,22 @@ class MovieListRemoteMediator(
                 return MediatorResult.Success(endOfPaginationReached = true)
             }
             LoadType.APPEND -> {
-                val remoteKeys = database.withTransaction {
-                    database.movieRemoteKeysDao().remoteKeys()?.lastOrNull()
+                val lastItem = state.lastItemOrNull()
+                val remoteKey = database.withTransaction {
+                    lastItem?.let {
+                        database.movieRemoteKeysDao().remoteKeyByMovieId(it.movieId)
+                    }
                 }
-                remoteKeys?.nextKey ?: return MediatorResult.Success(endOfPaginationReached = true)
+                if (remoteKey?.nextKey == null) {
+                    return MediatorResult.Success(endOfPaginationReached = true)
+                }
+
+                remoteKey.nextKey
             }
         }
         try {
             val response = moviesApi.getPopularMovies(loadKey)
-            val endOfPaginationReached = response.movieListResultObjects.size < state.config.pageSize
+            val endOfPaginationReached = response.movieListResultObjects.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.movieRemoteKeysDao().clearAll()
