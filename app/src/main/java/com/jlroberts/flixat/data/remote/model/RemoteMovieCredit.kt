@@ -4,7 +4,6 @@ import com.jlroberts.flixat.domain.model.CastMember
 import com.jlroberts.flixat.domain.model.Image
 
 data class RemoteMovieCredit(
-    val id: Int,
     val cast: List<RemoteCastMember>
 )
 

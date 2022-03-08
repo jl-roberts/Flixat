@@ -58,7 +58,7 @@ class NowPlayingFragment : Fragment() {
     private fun setupFeedList() {
         nowPlayingAdapter = MovieAdapter(imageLoader) { movie ->
             findNavController().navigate(
-                PopularFragmentDirections.actionFeedFragmentToDetailFragment(
+                NowPlayingFragmentDirections.actionNowPlayingToDetailFragment(
                     movie.movieId
                 )
             )

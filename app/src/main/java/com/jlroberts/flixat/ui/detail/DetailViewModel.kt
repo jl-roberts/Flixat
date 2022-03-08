@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import logcat.logcat
+import java.lang.NullPointerException
 
 import javax.inject.Inject
 
@@ -23,39 +24,27 @@ class DetailViewModel @Inject constructor(
     private val repository: Repository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
     private val _movie = MutableStateFlow<DetailMovie?>(null)
     val movie = _movie.asStateFlow()
-
-    private val _cast = MutableStateFlow<List<CastMember>?>(null)
-    val cast = _cast.asStateFlow()
-
-    private val _trailer = MutableStateFlow<MovieTrailer?>(null)
-    val trailer = _trailer.asStateFlow()
 
     private val _watchProviders = MutableStateFlow<List<WatchProvider>?>(null)
     val watchProviders = _watchProviders.asStateFlow()
 
+    private val movieId: Int? = savedStateHandle["movieId"]
+
     init {
         viewModelScope.launch {
-            val getMovie = async { repository.getMovieById(savedStateHandle["movieId"]!!) }
-            val getCast = async { repository.getCast(savedStateHandle["movieId"]!!) }
-            val getVideos = async { repository.getVideos(savedStateHandle["movieId"]!!) }
-            val getWatchProviders = async { repository.getWatchProviders(savedStateHandle["movieId"]!!) }
+            try {
+                val getMovie = async { repository.getMovieById(movieId!!, "videos,credits") }
+                val getWatchProviders =
+                    async { repository.getWatchProviders(movieId!!) }
 
                 _movie.value = getMovie.await().asDomainModel()
-
-                _cast.value = getCast.await().asDomainModel()
-
-                try {
-                    _trailer.value = getVideos.await().asDomainModel()
-                        .first { it.site == "YouTube" && it.type == "Trailer" }
-                } catch (e: Exception) {
-
-                }
-
-                 _movie.value =  repository.getMovieById(savedStateHandle["movieId"]!!).asDomainModel()
-
                 _watchProviders.value = getWatchProviders.await().results?.asDomainModel()
+            } catch (e: NullPointerException) {
+                logcat { "Error retrieving movieId" }
+            }
         }
     }
 }

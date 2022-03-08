@@ -52,19 +52,11 @@ class RepositoryImpl(
         pagingSourceFactory = { SearchPagingSource(moviesApi, query) }
     ).flow
 
-    override suspend fun getMovieById(movieId: Long): RemoteDetailMovie {
-        return moviesApi.getMovieById(movieId)
+    override suspend fun getMovieById(movieId: Int, appendResponse: String): RemoteDetailMovie {
+        return moviesApi.getMovieById(movieId, appendResponse)
     }
 
-    override suspend fun getCast(movieId: Long): RemoteMovieCredit {
-        return moviesApi.getCredits(movieId)
-    }
-
-    override suspend fun getVideos(movieId: Long): RemoteTrailersResponse {
-        return moviesApi.getVideos(movieId)
-    }
-
-    override suspend fun getWatchProviders(movidId: Long): RemoteWatchProviderResponse {
-        return moviesApi.getWatchProviders(movidId)
+    override suspend fun getWatchProviders(movieId: Int): RemoteWatchProviderResponse {
+        return moviesApi.getWatchProviders(movieId)
     }
 }

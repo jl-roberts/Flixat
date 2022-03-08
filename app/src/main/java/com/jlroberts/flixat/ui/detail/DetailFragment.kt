@@ -52,8 +52,11 @@ class DetailFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.trailer.collectLatest {
-                    it?.let {
+                viewModel.movie.collectLatest {
+                    it?.credits?.let { cast ->
+                        castAdapter.submitList(cast)
+                    }
+                    it?.videos?.let {
                         binding.trailerButton.visibility = View.VISIBLE
                     }
                 }
@@ -78,20 +81,12 @@ class DetailFragment : Fragment() {
         }
 
         binding.trailerButton.setOnClickListener {
-            val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + viewModel.trailer.value?.key))
-            val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + viewModel.trailer.value?.key))
+            val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + viewModel.movie.value?.videos?.first()?.key))
+            val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + viewModel.movie.value?.videos?.first()?.key))
             try {
                 startActivity(appIntent)
             } catch(e: ActivityNotFoundException) {
                 startActivity(webIntent)
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.cast.collectLatest {
-                    castAdapter.submitList(it)
-                }
             }
         }
 

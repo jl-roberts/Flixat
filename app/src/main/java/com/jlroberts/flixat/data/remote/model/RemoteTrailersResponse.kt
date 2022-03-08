@@ -3,7 +3,6 @@ package com.jlroberts.flixat.data.remote.model
 import com.jlroberts.flixat.domain.model.MovieTrailer
 
 data class RemoteTrailersResponse(
-    val id: Int,
     val results: List<RemoteMovieTrailer>
 )
 

@@ -25,16 +25,10 @@ interface MoviesApi {
     ): RemoteMovieListResponse
 
     @GET("movie/{movie_id}")
-    suspend fun getMovieById(@Path("movie_id") movieID: Long) : RemoteDetailMovie
-
-    @GET("movie/{movie_id}/videos")
-    suspend fun getVideos(@Path("movie_id") movieID: Long) : RemoteTrailersResponse
-
-    @GET("movie/{movie_id}/credits")
-    suspend fun getCredits(@Path("movie_id") movieID: Long) : RemoteMovieCredit
+    suspend fun getMovieById(@Path("movie_id") movieID: Int, @Query("append_to_response") appendResponse: String) : RemoteDetailMovie
 
     @GET("movie/{movie_id}/watch/providers")
-    suspend fun getWatchProviders(@Path("movie_id") movieId: Long) : RemoteWatchProviderResponse
+    suspend fun getWatchProviders(@Path("movie_id") movieId: Int) : RemoteWatchProviderResponse
 
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/3/"

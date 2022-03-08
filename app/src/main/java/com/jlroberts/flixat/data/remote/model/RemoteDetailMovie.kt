@@ -1,8 +1,6 @@
 package com.jlroberts.flixat.data.remote.model
 
-import com.jlroberts.flixat.domain.model.DetailMovie
-import com.jlroberts.flixat.domain.model.Genre
-import com.jlroberts.flixat.domain.model.Image
+import com.jlroberts.flixat.domain.model.*
 import com.squareup.moshi.Json
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,7 +33,9 @@ data class RemoteDetailMovie(
     @Json(name = "vote_average")
     val voteAverage: Double,
     @Json(name = "vote_count")
-    val voteCount: Long
+    val voteCount: Long,
+    val videos: RemoteTrailersResponse,
+    val credits: RemoteMovieCredit
 )
 
 fun RemoteDetailMovie.asDomainModel(): DetailMovie {
@@ -70,6 +70,27 @@ fun RemoteDetailMovie.asDomainModel(): DetailMovie {
         imdbId = imdbId,
         status = status,
         runtime = runtime,
-        tagline = tagline
+        tagline = tagline,
+        videos = videos.results.filter { it.type == "Trailer" && it.site == "YouTube" }.map {
+            MovieTrailer(
+                id = it.id,
+                key = it.key,
+                name = it.name,
+                site = it.site,
+                size = it.size,
+                type = it.type
+            )
+        },
+        credits = credits.cast.map {
+            CastMember(
+                castId = it.castId,
+                character = it.character,
+                creditId = it.creditId,
+                id = it.id,
+                name = it.name,
+                order = it.order,
+                profilePath = it.profilePath?.let { path -> Image(path) }
+            )
+        }
     )
 }
