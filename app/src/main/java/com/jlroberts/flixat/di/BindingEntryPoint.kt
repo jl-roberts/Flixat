@@ -9,7 +9,7 @@ import dagger.hilt.InstallIn
 @EntryPoint
 @BindingScope
 @InstallIn(BindingComponent::class)
-interface BindingEntryPoint: DataBindingComponent {
+interface BindingEntryPoint : DataBindingComponent {
 
     @BindingScope
     override fun getBindingAdapters(): BindingAdapters

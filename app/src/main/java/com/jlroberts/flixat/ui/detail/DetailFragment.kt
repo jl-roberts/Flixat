@@ -73,6 +73,10 @@ class DetailFragment : Fragment() {
             }
         }
 
+        binding.backButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         binding.trailerButton.setOnClickListener {
             val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + viewModel.trailer.value?.key))
             val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + viewModel.trailer.value?.key))

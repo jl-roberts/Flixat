@@ -50,6 +50,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:tint="@color/md_theme_dark_onSurface"
+                    android:id="@+id/back_button"
                     app:srcCompat="@drawable/ic_baseline_arrow_back_24"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="48dp"

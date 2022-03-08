@@ -1,4 +1,4 @@
-package com.jlroberts.flixat.ui
+package com.jlroberts.flixat.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,19 +14,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class SearchViewModel @Inject constructor(private val repository: Repository) :
+    ViewModel() {
 
     private var searchJob: Job? = null
 
     private val _searchResults = MutableStateFlow<PagingData<MovieListResult>>(PagingData.empty())
     val searchResults = _searchResults.asStateFlow()
-
-    private val _searchActive = MutableStateFlow(false)
-    val searchActive = _searchActive.asStateFlow()
 
     fun search(query: String) {
         searchJob?.cancel()
@@ -39,10 +36,5 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
                     _searchResults.value = it
                 }
         }
-    }
-
-    fun onSearchFabClicked() {
-        logcat { "viewModel detected fab click"}
-        _searchActive.value = !searchActive.value
     }
 }
