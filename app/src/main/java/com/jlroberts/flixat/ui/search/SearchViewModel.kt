@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.jlroberts.flixat.data.Repository
+import com.jlroberts.flixat.domain.repository.Repository
 import com.jlroberts.flixat.domain.model.MovieListResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

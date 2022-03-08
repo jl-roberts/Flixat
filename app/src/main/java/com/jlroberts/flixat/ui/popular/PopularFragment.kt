@@ -29,17 +29,20 @@ class PopularFragment : Fragment() {
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    private lateinit var binding: FragmentPopularBinding
     private val viewModel by viewModels<PopularViewModel>()
 
-    private lateinit var feedAdapter: MovieAdapter
+    private var _binding: FragmentPopularBinding? = null
+    private val binding get() = _binding!!
+
+    private var _feedAdapter: MovieAdapter? = null
+    private val feedAdapter get() = _feedAdapter!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPopularBinding.inflate(inflater)
+        _binding = FragmentPopularBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
@@ -56,7 +59,7 @@ class PopularFragment : Fragment() {
     }
 
     private fun setupFeedList() {
-        feedAdapter = MovieAdapter(imageLoader) { movie ->
+        _feedAdapter = MovieAdapter(imageLoader) { movie ->
             findNavController().navigate(
                 PopularFragmentDirections.actionFeedFragmentToDetailFragment(
                     movie.movieId
@@ -85,4 +88,9 @@ class PopularFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        _feedAdapter = null
+    }
 }

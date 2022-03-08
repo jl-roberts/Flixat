@@ -1,4 +1,4 @@
-package com.jlroberts.flixat.data
+package com.jlroberts.flixat.domain.repository
 
 import androidx.paging.PagingData
 import com.jlroberts.flixat.data.local.MovieListResultDB

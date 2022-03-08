@@ -33,17 +33,20 @@ class SearchFragment : Fragment() {
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    private lateinit var binding: FragmentSearchBinding
     private val viewModel by viewModels<SearchViewModel>()
 
-    private lateinit var searchAdapter: MovieAdapter
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
+    private var _searchAdapter: MovieAdapter? = null
+    private val searchAdapter get() = _searchAdapter!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater)
+        _binding = FragmentSearchBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
@@ -63,7 +66,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupFeedList() {
-        searchAdapter = MovieAdapter(imageLoader) { movie ->
+        _searchAdapter = MovieAdapter(imageLoader) { movie ->
             findNavController().navigate(
                 SearchFragmentDirections.actionSearchFragmentToDetailFragment(movie.movieId)
             )
@@ -97,5 +100,11 @@ class SearchFragment : Fragment() {
         binding.etSearch.post {
             inputMethodManager.showSoftInput(binding.etSearch, InputMethodManager.SHOW_FORCED)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        _searchAdapter = null
     }
 }

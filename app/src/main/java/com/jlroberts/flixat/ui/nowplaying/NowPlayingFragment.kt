@@ -29,17 +29,20 @@ class NowPlayingFragment : Fragment() {
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    private lateinit var binding: FragmentNowplayingBinding
     private val viewModel by viewModels<NowPlayingViewModel>()
 
-    private lateinit var nowPlayingAdapter: MovieAdapter
+    private var _binding: FragmentNowplayingBinding? = null
+    private val binding get() = _binding!!
+
+    private var _nowPlayingAdapter: MovieAdapter? = null
+    private val nowPlayingAdapter get() = _nowPlayingAdapter!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentNowplayingBinding.inflate(inflater)
+        _binding = FragmentNowplayingBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
@@ -56,7 +59,7 @@ class NowPlayingFragment : Fragment() {
     }
 
     private fun setupFeedList() {
-        nowPlayingAdapter = MovieAdapter(imageLoader) { movie ->
+        _nowPlayingAdapter = MovieAdapter(imageLoader) { movie ->
             findNavController().navigate(
                 NowPlayingFragmentDirections.actionNowPlayingToDetailFragment(
                     movie.movieId
@@ -83,6 +86,12 @@ class NowPlayingFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        _nowPlayingAdapter = null
     }
 
 }

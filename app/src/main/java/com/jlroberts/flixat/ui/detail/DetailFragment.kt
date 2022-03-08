@@ -33,7 +33,9 @@ class DetailFragment : Fragment() {
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    private lateinit var binding: FragmentDetailBinding
+    private var _binding: FragmentDetailBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel by viewModels<DetailViewModel>()
 
     @SuppressLint("UnsafeRepeatOnLifecycleDetector")
@@ -42,7 +44,7 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailBinding.inflate(inflater)
+        _binding = FragmentDetailBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
@@ -101,5 +103,10 @@ class DetailFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         activity?.useClearStatusBar(false)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

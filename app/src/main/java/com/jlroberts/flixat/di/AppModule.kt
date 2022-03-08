@@ -5,17 +5,17 @@ import android.content.Context
 import androidx.room.Room
 import coil.ImageLoader
 import coil.util.CoilUtils
-import com.jlroberts.flixat.data.Repository
+import com.jlroberts.flixat.domain.repository.Repository
 import com.jlroberts.flixat.data.local.FlixatDatabase
 import com.jlroberts.flixat.data.remote.MoviesApi
 import com.jlroberts.flixat.domain.paging.MovieListRemoteMediator
-import com.jlroberts.flixat.domain.repository.RepositoryImpl
-import dagger.Binds
+import com.jlroberts.flixat.data.repository.RepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
@@ -49,9 +49,10 @@ class AppModule {
     fun provideRepository(
         moviesApi: MoviesApi,
         database: FlixatDatabase,
-        remoteMediator: MovieListRemoteMediator
+        remoteMediator: MovieListRemoteMediator,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): Repository {
-        return RepositoryImpl(moviesApi, database, remoteMediator)
+        return RepositoryImpl(moviesApi, database, remoteMediator, ioDispatcher)
     }
 
     @Provides
