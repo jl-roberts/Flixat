@@ -4,8 +4,16 @@ import android.net.Uri
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
+import coil.transform.RoundedCornersTransformation
+import com.jlroberts.flixat.domain.model.CastMember
+import com.jlroberts.flixat.domain.model.MovieListResult
+import com.jlroberts.flixat.domain.model.WatchProvider
+import com.jlroberts.flixat.ui.detail.CastAdapter
+import com.jlroberts.flixat.ui.detail.WatchProviderAdapter
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -17,6 +25,7 @@ class BindingAdapters @Inject constructor(private val imageLoader: ImageLoader) 
             .data(uri)
             .target(imageView)
             .crossfade(true)
+            .transformations(RoundedCornersTransformation(20f))
             .build()
         imageLoader.enqueue(request)
     }
@@ -27,5 +36,17 @@ class BindingAdapters @Inject constructor(private val imageLoader: ImageLoader) 
             val dateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
             textView.text = dateFormat.format(date)
         }
+    }
+
+    @BindingAdapter("castData")
+    fun bindCastRecycler(recyclerView: RecyclerView, castMembers: List<CastMember>?) {
+        val adapter = recyclerView.adapter as CastAdapter
+        adapter.submitList(castMembers)
+    }
+
+    @BindingAdapter("watchProviderData")
+    fun bindWatchProviders(recyclerView: RecyclerView, watchProviders: List<WatchProvider>?) {
+        val adapter = recyclerView.adapter as WatchProviderAdapter
+        adapter.submitList(watchProviders)
     }
 }

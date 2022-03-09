@@ -44,4 +44,12 @@ class DetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun trailerButtonClicked() {
+
+    }
+
+    fun backClicked() {
+
+    }
 }

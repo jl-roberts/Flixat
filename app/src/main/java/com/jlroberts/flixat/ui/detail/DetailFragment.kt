@@ -10,21 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import coil.ImageLoader
-import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.FragmentDetailBinding
-import com.jlroberts.flixat.ui.MainActivity
 import com.jlroberts.flixat.utils.useClearStatusBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,50 +39,32 @@ class DetailFragment : Fragment() {
         binding.viewModel = viewModel
 
         val castAdapter = CastAdapter(imageLoader)
-        binding.castRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.castRecycler.adapter = castAdapter
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.movie.collectLatest {
-                    it?.credits?.let { cast ->
-                        castAdapter.submitList(cast)
-                    }
-                    it?.videos?.let {
-                        binding.trailerButton.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
-
         val watchProviderAdapter = WatchProviderAdapter(imageLoader)
-        binding.providerRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.providerRecycler.adapter = watchProviderAdapter
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.watchProviders.collectLatest {
-                    it?.let {
-                        watchProviderAdapter.submitList(it)
-                    }
-                }
-            }
-        }
-
-        binding.backButton.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        binding.trailerButton.setOnClickListener {
-            val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + viewModel.movie.value?.videos?.first()?.key))
-            val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + viewModel.movie.value?.videos?.first()?.key))
-            try {
-                startActivity(appIntent)
-            } catch(e: ActivityNotFoundException) {
-                startActivity(webIntent)
-            }
-        }
 
         return binding.root
+    }
+
+    private fun launchTrailer() {
+        val appIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("vnd.youtube:" + viewModel.movie.value?.videos?.first()?.key)
+        )
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("http://www.youtube.com/watch?v=" + viewModel.movie.value?.videos?.first()?.key)
+        )
+        try {
+            startActivity(appIntent)
+        } catch (e: ActivityNotFoundException) {
+            startActivity(webIntent)
+        }
+    }
+
+    private fun navigateUp() {
+        findNavController().navigateUp()
     }
 
     override fun onStart() {

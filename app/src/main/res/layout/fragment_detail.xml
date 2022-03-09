@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.jlroberts.flixat.ui.detail.DetailViewModel" />
@@ -12,7 +14,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -30,6 +33,7 @@
                 app:movieImage="@{viewModel.movie.backdropPath.original}" />
 
             <RelativeLayout
+                android:id="@+id/backdrop_scrim"
                 android:layout_width="match_parent"
                 android:layout_height="325dp"
                 android:background="@drawable/gradient"
@@ -43,31 +47,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="48dp"
+                android:contentDescription="@string/detail_back_content_description"
+                android:onClick="@{() -> viewModel.backClicked()}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_arrow_back_24"
                 app:tint="@color/md_theme_dark_onSurface" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/movie_image_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/movie_image"
+                android:layout_width="120dp"
+                android:layout_height="200dp"
                 android:layout_marginStart="16dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp"
+                android:contentDescription="@string/detail_movie_image_content_description"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="@id/backdrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/backdrop">
-
-                <ImageView
-                    android:id="@+id/movie_image"
-                    android:layout_width="120dp"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    app:movieImage="@{viewModel.movie.posterPath.large}" />
-            </androidx.cardview.widget.CardView>
+                app:layout_constraintTop_toBottomOf="@id/backdrop"
+                app:movieImage="@{viewModel.movie.posterPath.large}" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title_text"
@@ -84,9 +83,9 @@
                 app:layout_constraintBottom_toBottomOf="@+id/backdrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@id/movie_image_card"
+                app:layout_constraintStart_toEndOf="@id/movie_image"
                 app:layout_constraintTop_toBottomOf="@id/backdrop"
-                app:layout_constraintTop_toTopOf="@+id/movie_image_card"
+                app:layout_constraintTop_toTopOf="@+id/movie_image"
                 app:layout_constraintVertical_bias="1.0"
                 app:layout_constraintVertical_weight="@id/backdrop" />
 
@@ -102,9 +101,8 @@
                 android:text="@{viewModel.movie.tagline}"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/movie_image_card"
-                app:layout_constraintTop_toBottomOf="@+id/backdrop"
-                tools:text="asdl;kjfasdfl;kj ;lkajsdlkj lkjasdflkjasdlkfjasdlkfjlkj" />
+                app:layout_constraintStart_toEndOf="@id/movie_image"
+                app:layout_constraintTop_toBottomOf="@+id/backdrop" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/release_date"
@@ -112,10 +110,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                app:date="@{viewModel.movie.releaseDate}"
+                android:visibility="@{viewModel.movie.releaseDate != null ? View.VISIBLE : View.INVISIBLE}"
+                app:date='@{viewModel.movie.releaseDate}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@id/movie_image_card"
+                app:layout_constraintStart_toEndOf="@id/movie_image"
                 app:layout_constraintTop_toBottomOf="@id/tagline"
                 tools:text="1009" />
 
@@ -124,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="@{@string/runtime_format(viewModel.movie.runtime)}"
+                android:text='@{viewModel.movie.runtime != null ? @string/runtime_format(viewModel.movie.runtime) : ""}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@id/release_date"
@@ -137,7 +136,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/movie_image_card" />
+                app:layout_constraintTop_toBottomOf="@id/movie_image" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/cast_label"
@@ -145,8 +144,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Cast"
+                android:text="@string/detail_cast_label"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                android:visibility="@{viewModel.movie.credits != null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/chip_group" />
 
@@ -156,8 +156,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:clipToPadding="false"
+                android:orientation="horizontal"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
+                app:castData="@{viewModel.movie.credits}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cast_label" />
@@ -168,8 +171,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="48dp"
                 android:layout_marginRight="48dp"
-                android:text="View trailer"
-                android:visibility="gone"
+                android:onClick="@{() -> viewModel.trailerButtonClicked()}"
+                android:text="@string/detail_view_trailer_btn_text"
+                android:visibility="@{viewModel.movie.videos != null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cast_recycler" />
@@ -180,8 +184,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="Overview"
+                android:text="@string/detail_overview_label"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                android:visibility="@{viewModel.movie.overview != null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/trailer_button" />
 
@@ -195,8 +200,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/overview_label"
-                tools:text="Test movie title long see wrapped" />
+                app:layout_constraintTop_toBottomOf="@id/overview_label" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/provider_label"
@@ -204,8 +208,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="Watch providers"
+                android:text="@string/detail_watch_providers_label"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                android:visibility="@{viewModel.watchProviders.size() == 0 ? View.GONE : View.VISIBLE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/overview_text" />
 
@@ -215,11 +220,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:clipToPadding="false"
+                android:orientation="horizontal"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
+                android:visibility="@{viewModel.watchProviders.size() == 0 ? View.GONE : View.VISIBLE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/provider_label" />
+                app:layout_constraintTop_toBottomOf="@id/provider_label"
+                app:watchProviderData="@{viewModel.watchProviders}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

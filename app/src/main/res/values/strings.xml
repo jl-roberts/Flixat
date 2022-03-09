@@ -4,4 +4,10 @@
     <string name="now_playing">Now playing</string>
     <string name="search">Search</string>
     <string name="runtime_format">%s min</string>
+    <string name="detail_back_content_description">Back</string>
+    <string name="detail_movie_image_content_description">Movie poster image</string>
+    <string name="detail_watch_providers_label">Watch providers</string>
+    <string name="detail_overview_label">Overview</string>
+    <string name="detail_view_trailer_btn_text">View trailer</string>
+    <string name="detail_cast_label">Cast</string>
 </resources>
