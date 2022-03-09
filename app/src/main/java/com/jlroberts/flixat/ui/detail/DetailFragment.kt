@@ -10,11 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.transform.RoundedCornersTransformation
 import com.jlroberts.flixat.databinding.FragmentDetailBinding
 import com.jlroberts.flixat.utils.useClearStatusBar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,6 +51,36 @@ class DetailFragment : Fragment() {
 
         val watchProviderAdapter = WatchProviderAdapter(imageLoader)
         binding.providerRecycler.adapter = watchProviderAdapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+                    when (event) {
+                        is DetailEvent.TrailerClicked -> launchTrailer()
+                        is DetailEvent.BackClicked -> navigateUp()
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.movie.collectLatest { movie ->
+                    val request = ImageRequest.Builder(binding.backdrop.context)
+                        .data(movie?.backdropPath?.original)
+                        .target(binding.backdrop)
+                        .listener(
+                            onSuccess = {
+                                _, _ ->
+                                binding.backdropScrim.visibility = View.VISIBLE
+                            }
+                        )
+                        .crossfade(true)
+                        .build()
+                    imageLoader.enqueue(request)
+                }
+            }
+        }
 
         return binding.root
     }

@@ -7,11 +7,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
+import coil.transform.RoundedCornersTransformation
 import com.jlroberts.flixat.databinding.RvMovieBinding
 import com.jlroberts.flixat.domain.model.MovieListResult
 import logcat.logcat
 
-class MovieAdapter(private val imageLoader: ImageLoader, private val listener: (MovieListResult) -> Unit) :
+class MovieAdapter(
+    private val imageLoader: ImageLoader,
+    private val listener: (MovieListResult) -> Unit
+) :
     PagingDataAdapter<MovieListResult, MovieAdapter.ViewHolder>(MovieComparator) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -29,10 +33,10 @@ class MovieAdapter(private val imageLoader: ImageLoader, private val listener: (
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MovieListResult, imageLoader: ImageLoader) {
             binding.movie = item
-            logcat { item.posterPath?.large.toString() }
             val request = ImageRequest.Builder(binding.movieImage.context)
                 .data(item.posterPath?.large)
                 .target(binding.movieImage)
+                .transformations(RoundedCornersTransformation(20f))
                 .crossfade(true)
                 .build()
             imageLoader.enqueue(request)

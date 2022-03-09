@@ -9,7 +9,9 @@ import com.jlroberts.flixat.domain.model.DetailMovie
 import com.jlroberts.flixat.domain.model.WatchProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import logcat.logcat
@@ -29,6 +31,9 @@ class DetailViewModel @Inject constructor(
     private val _watchProviders = MutableStateFlow<List<WatchProvider>?>(null)
     val watchProviders = _watchProviders.asStateFlow()
 
+    private val _event = MutableSharedFlow<DetailEvent>()
+    val event = _event.asSharedFlow()
+
     private val movieId: Int? = savedStateHandle["movieId"]
 
     init {
@@ -46,10 +51,14 @@ class DetailViewModel @Inject constructor(
     }
 
     fun trailerButtonClicked() {
-
+        viewModelScope.launch {
+            _event.emit(DetailEvent.TrailerClicked)
+        }
     }
 
     fun backClicked() {
-
+        viewModelScope.launch {
+            _event.emit(DetailEvent.BackClicked)
+        }
     }
 }

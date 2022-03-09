@@ -29,13 +29,13 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:movieImage="@{viewModel.movie.backdropPath.original}" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RelativeLayout
                 android:id="@+id/backdrop_scrim"
                 android:layout_width="match_parent"
                 android:layout_height="325dp"
+                android:visibility="invisible"
                 android:background="@drawable/gradient"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,174 +61,176 @@
                 android:layout_marginStart="16dp"
                 android:contentDescription="@string/detail_movie_image_content_description"
                 android:scaleType="centerCrop"
+                app:movieImage="@{viewModel.movie.posterPath.large}"
                 app:layout_constraintBottom_toBottomOf="@id/backdrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/backdrop"
-                app:movieImage="@{viewModel.movie.posterPath.large}" />
+                app:layout_constraintTop_toBottomOf="@id/backdrop" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/title_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:text="@{viewModel.movie.title}"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                android:textColor="@color/md_theme_dark_onSurface"
-                app:layout_constraintBottom_toBottomOf="@+id/backdrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@id/movie_image"
-                app:layout_constraintTop_toBottomOf="@id/backdrop"
-                app:layout_constraintTop_toTopOf="@+id/movie_image"
-                app:layout_constraintVertical_bias="1.0"
-                app:layout_constraintVertical_weight="@id/backdrop" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/title_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="@{viewModel.movie.title}"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:textColor="@color/md_theme_dark_onSurface"
+                    app:layout_constraintBottom_toBottomOf="@+id/backdrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/movie_image"
+                    app:layout_constraintTop_toBottomOf="@id/backdrop"
+                    app:layout_constraintTop_toTopOf="@+id/movie_image"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:layout_constraintVertical_weight="@id/backdrop" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tagline"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="@{viewModel.movie.tagline}"
-                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/movie_image"
-                app:layout_constraintTop_toBottomOf="@+id/backdrop" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tagline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@{viewModel.movie.tagline}"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/movie_image"
+                    app:layout_constraintTop_toBottomOf="@+id/backdrop" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/release_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:visibility="@{viewModel.movie.releaseDate != null ? View.VISIBLE : View.INVISIBLE}"
-                app:date='@{viewModel.movie.releaseDate}'
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@id/movie_image"
-                app:layout_constraintTop_toBottomOf="@id/tagline"
-                tools:text="1009" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:visibility="@{viewModel.movie.releaseDate != null ? View.VISIBLE : View.INVISIBLE}"
+                    app:date='@{viewModel.movie.releaseDate}'
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/movie_image"
+                    app:layout_constraintTop_toBottomOf="@id/tagline"
+                    tools:text="1009" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text='@{viewModel.movie.runtime != null ? @string/runtime_format(viewModel.movie.runtime) : ""}'
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@id/release_date"
-                app:layout_constraintTop_toBottomOf="@id/tagline"
-                tools:text="120 min" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text='@{viewModel.movie.runtime != null ? @string/runtime_format(viewModel.movie.runtime) : ""}'
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/release_date"
+                    app:layout_constraintTop_toBottomOf="@id/tagline"
+                    tools:text="120 min" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chip_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/movie_image" />
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/movie_image" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/cast_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/detail_cast_label"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                android:visibility="@{viewModel.movie.credits != null ? View.VISIBLE : View.GONE}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chip_group" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/cast_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/detail_cast_label"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    android:visibility="@{viewModel.movie.credits != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/chip_group" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cast_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                app:castData="@{viewModel.movie.credits}"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cast_label" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cast_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    app:castData="@{viewModel.movie.credits}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cast_label" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/trailer_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="48dp"
-                android:layout_marginRight="48dp"
-                android:onClick="@{() -> viewModel.trailerButtonClicked()}"
-                android:text="@string/detail_view_trailer_btn_text"
-                android:visibility="@{viewModel.movie.videos != null ? View.VISIBLE : View.GONE}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cast_recycler" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/trailer_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="48dp"
+                    android:layout_marginRight="48dp"
+                    android:onClick="@{() -> viewModel.trailerButtonClicked()}"
+                    android:text="@string/detail_view_trailer_btn_text"
+                    android:visibility="@{viewModel.movie.videos != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cast_recycler" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/overview_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:text="@string/detail_overview_label"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                android:visibility="@{viewModel.movie.overview != null ? View.VISIBLE : View.GONE}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/trailer_button" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/overview_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/detail_overview_label"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    android:visibility="@{viewModel.movie.overview != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/trailer_button" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/overview_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@{viewModel.movie.overview}"
-                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/overview_label" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/overview_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@{viewModel.movie.overview}"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/overview_label" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/provider_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:text="@string/detail_watch_providers_label"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                android:visibility="@{viewModel.watchProviders.size() == 0 ? View.GONE : View.VISIBLE}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/overview_text" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/provider_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/detail_watch_providers_label"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    android:visibility="@{viewModel.watchProviders.size() == 0 ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/overview_text" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/provider_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:visibility="@{viewModel.watchProviders.size() == 0 ? View.GONE : View.VISIBLE}"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/provider_label"
-                app:watchProviderData="@{viewModel.watchProviders}" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/provider_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:visibility="@{viewModel.watchProviders.size() == 0 ? View.GONE : View.VISIBLE}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/provider_label"
+                    app:watchProviderData="@{viewModel.watchProviders}" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>
