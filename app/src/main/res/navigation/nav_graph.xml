@@ -23,6 +23,9 @@
             android:id="@+id/action_detailFragment_to_feedFragment"
             app:destination="@id/popularFragment" />
         <action
+            android:id="@+id/action_detailFragment_to_detailFragment"
+            app:destination="@id/detailFragment2" />
+        <action
             android:id="@+id/action_detailFragment_to_nowPlayingFragment"
             app:destination="@id/nowPlayingFragment" />
         <argument
@@ -31,6 +34,17 @@
         <action
             android:id="@+id/action_detailFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment2"
+        android:name="com.jlroberts.flixat.ui.detail.DetailFragment"
+        android:label="" >
+        <action
+            android:id="@+id/action_detailFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/nowPlayingFragment"

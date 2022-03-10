@@ -3,7 +3,6 @@ package com.jlroberts.flixat.data.remote.model
 import com.jlroberts.flixat.domain.model.*
 import com.squareup.moshi.Json
 import java.text.SimpleDateFormat
-import java.util.*
 
 data class RemoteDetailMovie(
     val adult: Boolean,
@@ -35,7 +34,12 @@ data class RemoteDetailMovie(
     @Json(name = "vote_count")
     val voteCount: Long,
     val videos: RemoteTrailersResponse,
-    val credits: RemoteMovieCredit
+    val credits: RemoteMovieCredit,
+    val similar: RemoteSimilarMoviesResponse,
+    @Json(name = "watch/providers")
+    val watchProviders: RemoteWatchProviderResponse,
+    @Json(name = "external_ids")
+    val externalIds: RemoteExternalID
 )
 
 fun RemoteDetailMovie.asDomainModel(): DetailMovie {
@@ -91,6 +95,19 @@ fun RemoteDetailMovie.asDomainModel(): DetailMovie {
                 order = it.order,
                 profilePath = it.profilePath?.let { path -> Image(path) }
             )
-        }
+        },
+        similar = similar.results.map {
+            MovieListResult(
+                movieId = it.id,
+                posterPath = it.posterPath?.let { path -> Image(path) }
+            )
+        },
+        watchProviders = watchProviders.results?.asDomainModel(),
+        externalIds = ExternalID(
+            imdbId = externalIds.imdbId,
+            facebookId = externalIds.facebookId,
+            instagramId = externalIds.instagramId,
+            twitterId = externalIds.twitterId
+        )
     )
 }

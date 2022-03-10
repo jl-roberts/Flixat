@@ -60,9 +60,4 @@ class RepositoryImpl (
         withContext(dispatcher) {
             moviesApi.getMovieById(movieId, appendResponse)
         }
-
-    override suspend fun getWatchProviders(movieId: Int): RemoteWatchProviderResponse =
-        withContext(dispatcher) {
-            moviesApi.getWatchProviders(movieId)
-        }
 }

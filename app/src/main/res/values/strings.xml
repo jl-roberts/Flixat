@@ -10,4 +10,5 @@
     <string name="detail_overview_label">Overview</string>
     <string name="detail_view_trailer_btn_text">View trailer</string>
     <string name="detail_cast_label">Cast</string>
+    <string name="similar_label">Similar</string>
 </resources>

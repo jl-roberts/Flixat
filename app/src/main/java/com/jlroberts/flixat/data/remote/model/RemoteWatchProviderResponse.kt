@@ -5,7 +5,6 @@ import com.jlroberts.flixat.domain.model.WatchProvider
 import com.squareup.moshi.Json
 
 data class RemoteWatchProviderResponse(
-    val id: Int,
     val results: Results?
 )
 

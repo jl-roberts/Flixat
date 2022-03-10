@@ -17,7 +17,11 @@ import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
+import com.google.android.material.chip.Chip
 import com.jlroberts.flixat.databinding.FragmentDetailBinding
+import com.jlroberts.flixat.domain.model.DetailMovie
+import com.jlroberts.flixat.ui.common.MovieAdapter
+import com.jlroberts.flixat.ui.nowplaying.NowPlayingFragmentDirections
 import com.jlroberts.flixat.utils.useClearStatusBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -49,6 +53,15 @@ class DetailFragment : Fragment() {
         val castAdapter = CastAdapter(imageLoader)
         binding.castRecycler.adapter = castAdapter
 
+        val similarAdapter = SimilarMoviesAdapter(imageLoader) { movie ->
+            findNavController().navigate(
+                DetailFragmentDirections.actionDetailFragmentToDetailFragment(
+                    movie.movieId
+                )
+            )
+        }
+        binding.rvSimilar.adapter = similarAdapter
+
         val watchProviderAdapter = WatchProviderAdapter(imageLoader)
         binding.providerRecycler.adapter = watchProviderAdapter
 
@@ -65,19 +78,18 @@ class DetailFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.movie.collectLatest { movie ->
-                    val request = ImageRequest.Builder(binding.backdrop.context)
-                        .data(movie?.backdropPath?.original)
-                        .target(binding.backdrop)
-                        .listener(
-                            onSuccess = {
-                                _, _ ->
-                                binding.backdropScrim.visibility = View.VISIBLE
-                            }
-                        )
-                        .crossfade(true)
-                        .build()
-                    imageLoader.enqueue(request)
+                viewModel.state.collectLatest { state ->
+                    when(state) {
+                        is DetailState.Success -> {
+                            binding.movie = state.movie
+                            loadBackdrop(state.movie)
+                            showTrailerButton(!state.movie.videos.isNullOrEmpty())
+                            hideLoading()
+                        }
+                        is DetailState.Loading -> {
+                            showLoading()
+                        }
+                    }
                 }
             }
         }
@@ -85,14 +97,43 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
+    private fun showLoading() {
+        binding.loading.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.loading.visibility = View.GONE
+    }
+
+    private fun loadBackdrop(movie: DetailMovie) {
+        val request = ImageRequest.Builder(binding.backdrop.context)
+            .data(movie.backdropPath?.original)
+            .target(binding.backdrop)
+            .listener(
+                onStart = {
+                    binding.backdropScrim.visibility = View.VISIBLE
+                }
+            )
+            .crossfade(true)
+            .crossfade(200)
+            .build()
+        imageLoader.enqueue(request)
+    }
+
+    private fun showTrailerButton(show: Boolean) {
+        if (show) {
+            binding.trailerButton.visibility = View.VISIBLE
+        }
+    }
+
     private fun launchTrailer() {
         val appIntent = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("vnd.youtube:" + viewModel.movie.value?.videos?.first()?.key)
+            Uri.parse("vnd.youtube:" + viewModel.trailerKey)
         )
         val webIntent = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("http://www.youtube.com/watch?v=" + viewModel.movie.value?.videos?.first()?.key)
+            Uri.parse("http://www.youtube.com/watch?v=" + viewModel.trailerKey)
         )
         try {
             startActivity(appIntent)

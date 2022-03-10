@@ -27,9 +27,6 @@ interface MoviesApi {
     @GET("movie/{movie_id}")
     suspend fun getMovieById(@Path("movie_id") movieID: Int, @Query("append_to_response") appendResponse: String) : RemoteDetailMovie
 
-    @GET("movie/{movie_id}/watch/providers")
-    suspend fun getWatchProviders(@Path("movie_id") movieId: Int) : RemoteWatchProviderResponse
-
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/3/"
     }

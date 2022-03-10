@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         }
         navController.addOnDestinationChangedListener { controller, destination, bundle ->
             when (destination.id) {
-                R.id.detailFragment, R.id.searchFragment -> {
+                R.id.detailFragment, R.id.detailFragment2, R.id.searchFragment -> {
                     binding.bottomNav.visibility = View.GONE
                     binding.bottomAppBar.visibility = View.GONE
                     binding.searchFab.visibility = View.GONE

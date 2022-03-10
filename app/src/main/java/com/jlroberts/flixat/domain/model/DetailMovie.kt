@@ -24,5 +24,8 @@ data class DetailMovie(
     val voteAverage: Double = 0.0,
     val voteCount: Long = 0L,
     val videos: List<MovieTrailer>?,
-    val credits: List<CastMember>
+    val credits: List<CastMember>,
+    val similar: List<MovieListResult>,
+    val watchProviders: List<WatchProvider>?,
+    val externalIds: ExternalID
 )
