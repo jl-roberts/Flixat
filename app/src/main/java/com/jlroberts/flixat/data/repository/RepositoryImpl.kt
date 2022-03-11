@@ -7,7 +7,6 @@ import androidx.paging.PagingData
 import com.jlroberts.flixat.data.local.FlixatDatabase
 import com.jlroberts.flixat.data.remote.MoviesApi
 import com.jlroberts.flixat.data.remote.model.RemoteDetailMovie
-import com.jlroberts.flixat.data.remote.model.RemoteWatchProviderResponse
 import com.jlroberts.flixat.di.IoDispatcher
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.paging.MovieListRemoteMediator
@@ -17,11 +16,11 @@ import com.jlroberts.flixat.domain.repository.Repository
 import com.jlroberts.flixat.utils.MOVIES_PAGE_SIZE
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class RepositoryImpl (
+class RepositoryImpl(
     private val moviesApi: MoviesApi,
     private val database: FlixatDatabase,
     private val remoteMediator: MovieListRemoteMediator,
@@ -56,8 +55,10 @@ class RepositoryImpl (
         pagingSourceFactory = { SearchPagingSource(moviesApi, query) }
     ).flow.flowOn(dispatcher)
 
-    override suspend fun getMovieById(movieId: Int, appendResponse: String): RemoteDetailMovie =
-        withContext(dispatcher) {
-            moviesApi.getMovieById(movieId, appendResponse)
-        }
+    override suspend fun getMovieById(
+        movieId: Int,
+        appendResponse: String
+    ): Flow<RemoteDetailMovie> = flow {
+            emit(moviesApi.getMovieById(movieId, appendResponse))
+        }.flowOn(dispatcher)
 }

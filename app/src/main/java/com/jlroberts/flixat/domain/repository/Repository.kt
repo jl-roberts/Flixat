@@ -11,5 +11,5 @@ interface Repository {
     val popularMovies: Flow<PagingData<MovieListResultDB>>
     val inTheaters: Flow<PagingData<MovieListResult>>
     fun search(query: String): Flow<PagingData<MovieListResult>>
-    suspend fun getMovieById(movieId: Int, appendResponse: String): RemoteDetailMovie
+    suspend fun getMovieById(movieId: Int, appendResponse: String): Flow<RemoteDetailMovie>
 }

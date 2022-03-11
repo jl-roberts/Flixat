@@ -24,16 +24,52 @@
             type="List&lt;WatchProvider&gt;" />
     </data>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/retry_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/no_network"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:lottie_rawRes="@raw/network_lottie"
+                android:layout_above="@id/retry_button"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No internet connection, please retry."
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/retry_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="32dp"
+                android:text="Retry" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true" />
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:lottie_rawRes="@raw/loading"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
 
         <ScrollView
             android:id="@+id/content"
@@ -295,5 +331,5 @@
                     app:watchProviderData="@{movie.watchProviders}" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-    </FrameLayout>
+    </RelativeLayout>
 </layout>

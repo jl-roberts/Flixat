@@ -1,6 +1,7 @@
 package com.jlroberts.flixat.data.remote
 
-import com.jlroberts.flixat.data.remote.model.*
+import com.jlroberts.flixat.data.remote.model.RemoteDetailMovie
+import com.jlroberts.flixat.data.remote.model.RemoteMovieListResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -25,7 +26,10 @@ interface MoviesApi {
     ): RemoteMovieListResponse
 
     @GET("movie/{movie_id}")
-    suspend fun getMovieById(@Path("movie_id") movieID: Int, @Query("append_to_response") appendResponse: String) : RemoteDetailMovie
+    suspend fun getMovieById(
+        @Path("movie_id") movieID: Int,
+        @Query("append_to_response") appendResponse: String
+    ): RemoteDetailMovie
 
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/3/"

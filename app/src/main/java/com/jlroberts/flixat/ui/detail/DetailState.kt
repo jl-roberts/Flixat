@@ -1,9 +1,12 @@
 package com.jlroberts.flixat.ui.detail
 
+import android.os.Parcelable
 import com.jlroberts.flixat.domain.model.DetailMovie
+import kotlinx.parcelize.Parcelize
 
-sealed class DetailState {
-    data class Success(val movie: DetailMovie): DetailState()
-    object Loading : DetailState()
-    object Error : DetailState()
-}
+@Parcelize
+data class DetailState(
+    val movie: DetailMovie? = null,
+    val loading: Boolean = true,
+    val error: Boolean = false
+): Parcelable

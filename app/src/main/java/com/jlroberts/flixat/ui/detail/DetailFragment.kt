@@ -64,6 +64,9 @@ class DetailFragment : Fragment() {
 
         val watchProviderAdapter = WatchProviderAdapter(imageLoader)
         binding.providerRecycler.adapter = watchProviderAdapter
+        binding.retryButton.setOnClickListener {
+            viewModel.retry()
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -78,18 +81,20 @@ class DetailFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collectLatest { state ->
-                    when(state) {
-                        is DetailState.Success -> {
-                            binding.movie = state.movie
-                            loadBackdrop(state.movie)
-                            showTrailerButton(!state.movie.videos.isNullOrEmpty())
-                            hideLoading()
-                        }
-                        is DetailState.Loading -> {
-                            showLoading()
-                        }
+                viewModel.state.collect { state ->
+                    when(state.loading) {
+                        true -> showLoading()
+                        false -> hideLoading()
                     }
+
+                    when(state.error) {
+                        true -> showError()
+                        false -> hideError()
+                    }
+
+                    binding.movie = state.movie
+                    loadBackdrop(state.movie)
+                    showTrailerButton(!state.movie?.videos.isNullOrEmpty())
                 }
             }
         }
@@ -105,9 +110,17 @@ class DetailFragment : Fragment() {
         binding.loading.visibility = View.GONE
     }
 
-    private fun loadBackdrop(movie: DetailMovie) {
+    private fun showError() {
+        binding.retryLayout.visibility = View.VISIBLE
+    }
+
+    private fun hideError() {
+        binding.retryLayout.visibility = View.GONE
+    }
+
+    private fun loadBackdrop(movie: DetailMovie?) {
         val request = ImageRequest.Builder(binding.backdrop.context)
-            .data(movie.backdropPath?.original)
+            .data(movie?.backdropPath?.original)
             .target(binding.backdrop)
             .listener(
                 onStart = {
