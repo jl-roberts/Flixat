@@ -13,8 +13,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.ImageLoader
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.FragmentNowplayingBinding
 import com.jlroberts.flixat.ui.common.MovieAdapter
 import com.jlroberts.flixat.ui.popular.PopularFragmentDirections
@@ -86,6 +90,24 @@ class NowPlayingFragment : Fragment() {
                 }
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                nowPlayingAdapter.loadStateFlow.collectLatest { loadState ->
+                    if (loadState.refresh is LoadState.Error || loadState.append is LoadState.Error) {
+                        showNoNetworkSnackbar()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showNoNetworkSnackbar() {
+        val fab: FloatingActionButton = activity?.findViewById(R.id.search_fab)!!
+        val snackbar = Snackbar.make(fab, "No internet connection, cannot refresh", Snackbar.LENGTH_LONG).apply {
+            anchorView = fab
+        }.setAction("Retry") {
+           nowPlayingAdapter.retry()
+        }.show()
     }
 
     override fun onDestroyView() {
@@ -93,5 +115,4 @@ class NowPlayingFragment : Fragment() {
         _binding = null
         _nowPlayingAdapter = null
     }
-
 }

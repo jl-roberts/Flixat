@@ -2,6 +2,7 @@ package com.jlroberts.flixat.di
 
 import com.jlroberts.flixat.BuildConfig
 import com.jlroberts.flixat.data.remote.MoviesApi
+import com.jlroberts.flixat.utils.TMDB_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -31,7 +32,7 @@ class NetworkModule {
                 val request = chain.request().newBuilder()
                 val originalHttpUrl = chain.request().url
                 val url =
-                    originalHttpUrl.newBuilder().addQueryParameter("api_key", BuildConfig.api_key)
+                    originalHttpUrl.newBuilder().addQueryParameter("api_key", BuildConfig.tmdb_key)
                         .build()
                 request.url(url)
                 return@addInterceptor chain.proceed(request.build())
@@ -48,7 +49,7 @@ class NetworkModule {
     @Singleton
     fun provideMoviesApi(client: OkHttpClient, moshi: Moshi): MoviesApi {
         return Retrofit.Builder()
-            .baseUrl(MoviesApi.BASE_URL)
+            .baseUrl(TMDB_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

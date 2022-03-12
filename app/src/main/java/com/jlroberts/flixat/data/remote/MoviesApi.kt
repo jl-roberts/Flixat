@@ -30,8 +30,4 @@ interface MoviesApi {
         @Path("movie_id") movieID: Int,
         @Query("append_to_response") appendResponse: String
     ): RemoteDetailMovie
-
-    companion object {
-        const val BASE_URL = "https://api.themoviedb.org/3/"
-    }
 }
