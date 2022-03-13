@@ -86,6 +86,9 @@ dependencies {
     implementation 'com.squareup.logcat:logcat:0.1'
     implementation 'io.coil-kt:coil:1.4.0'
     implementation 'com.airbnb.android:lottie:5.0.3'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 

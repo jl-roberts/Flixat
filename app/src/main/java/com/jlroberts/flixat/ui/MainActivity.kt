@@ -32,14 +32,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun setupListeners() {
         binding.searchFab.setOnClickListener {
             navController.navigate(R.id.searchFragment)
         }
         navController.addOnDestinationChangedListener { controller, destination, bundle ->
             when (destination.id) {
-                R.id.detailFragment, R.id.detailFragment2, R.id.searchFragment -> {
+                R.id.detailFragment, R.id.detailFragment2, R.id.searchFragment, R.id.preferenceFragment, R.id.aboutFragment -> {
                     binding.bottomNav.visibility = View.GONE
                     binding.bottomAppBar.visibility = View.GONE
                     binding.searchFab.visibility = View.GONE

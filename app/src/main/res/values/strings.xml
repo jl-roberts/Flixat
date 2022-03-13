@@ -11,4 +11,8 @@
     <string name="detail_view_trailer_btn_text">View trailer</string>
     <string name="detail_cast_label">Cast</string>
     <string name="similar_label">Similar</string>
+    <string name="permission_denied_explanation">To show you personalized results, we require location permissions.</string>
+    <string name="dialog_permission_title">Permissions needed</string>
+    <string name="dialog_permission_button_positive">OK</string>
+    <string name="country_preference">Country</string>
 </resources>

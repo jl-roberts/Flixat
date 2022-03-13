@@ -32,7 +32,7 @@ class NetworkModule {
                 val request = chain.request().newBuilder()
                 val originalHttpUrl = chain.request().url
                 val url =
-                    originalHttpUrl.newBuilder().addQueryParameter("api_key", BuildConfig.tmdb_key)
+                    originalHttpUrl.newBuilder().addQueryParameter("api_key", BuildConfig.api_key)
                         .build()
                 request.url(url)
                 return@addInterceptor chain.proceed(request.build())

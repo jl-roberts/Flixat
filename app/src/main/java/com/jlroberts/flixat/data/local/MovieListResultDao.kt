@@ -10,11 +10,11 @@ import androidx.room.Query
 interface MovieListResultDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(movieList: List<MovieListResultDB>)
+    suspend fun insertAllMovies(movieList: List<MovieListResultDB>)
 
     @Query("SELECT * FROM movielistresultdb ORDER BY id ASC")
     fun getMovies(): PagingSource<Int, MovieListResultDB>
 
     @Query("DELETE FROM movielistresultdb")
-    suspend fun clearAll()
+    suspend fun clearAllMovies()
 }

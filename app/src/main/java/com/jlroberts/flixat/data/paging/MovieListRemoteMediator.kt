@@ -1,4 +1,4 @@
-package com.jlroberts.flixat.domain.paging
+package com.jlroberts.flixat.data.paging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -43,9 +43,7 @@ class MovieListRemoteMediator(
             LoadType.APPEND -> {
                 val lastItem = state.lastItemOrNull()
                 val remoteKey = database.withTransaction {
-                    lastItem?.let {
-                        database.movieRemoteKeysDao().remoteKeyByMovieId(it.movieId)
-                    }
+                    database.movieRemoteKeysDao().remoteKeys()?.sortedBy { it.nextKey }?.last()
                 }
                 if (remoteKey?.nextKey == null) {
                     return MediatorResult.Success(endOfPaginationReached = true)
@@ -59,16 +57,16 @@ class MovieListRemoteMediator(
             val endOfPaginationReached = response.movieListResults.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    database.movieRemoteKeysDao().clearAll()
-                    database.movieListResultDao().clearAll()
+                    database.movieRemoteKeysDao().clearAllKeys()
+                    database.movieListResultDao().clearAllMovies()
                 }
                 val prevKey = if (loadKey == 1) null else loadKey - 1
                 val nextKey = if (endOfPaginationReached) null else loadKey + 1
                 val keys = response.movieListResults.map {
                     MovieRemoteKey(movieId = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
-                database.movieRemoteKeysDao().insertAll(keys)
-                database.movieListResultDao().insertAll(response.asDatabaseModel())
+                database.movieRemoteKeysDao().insertAllKeys(keys)
+                database.movieListResultDao().insertAllMovies(response.asDatabaseModel())
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: IOException) {

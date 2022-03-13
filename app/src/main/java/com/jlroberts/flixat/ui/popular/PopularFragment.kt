@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,8 +16,6 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.ImageLoader
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.jlroberts.flixat.R
@@ -63,6 +59,22 @@ class PopularFragment : Fragment() {
     private fun setupToolbar() {
         val appBarConfiguration = AppBarConfiguration(findNavController().graph)
         binding.toolbar.setupWithNavController(findNavController(), appBarConfiguration)
+        binding.toolbar.inflateMenu(R.menu.toolbar_menu)
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.about -> {
+                    findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToAboutFragment())
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.preferences -> {
+                    findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToPreferenceFragment())
+                    return@setOnMenuItemClickListener true
+                }
+                else -> {
+                    return@setOnMenuItemClickListener false
+                }
+            }
+        }
     }
 
     private fun setupFeedList() {
@@ -107,11 +119,13 @@ class PopularFragment : Fragment() {
 
     private fun showNoNetworkSnackbar() {
         val fab: FloatingActionButton = activity?.findViewById(R.id.search_fab)!!
-        val snackbar = Snackbar.make(fab, "No internet connection, cannot refresh", Snackbar.LENGTH_LONG).apply {
-            anchorView = fab
-        }.setAction("Retry") {
-            feedAdapter.retry()
-        }.show()
+        val snackbar =
+            Snackbar.make(fab, "No internet connection, cannot refresh", Snackbar.LENGTH_LONG)
+                .apply {
+                    anchorView = fab
+                }.setAction("Retry") {
+                    feedAdapter.retry()
+                }.show()
     }
 
     override fun onDestroyView() {

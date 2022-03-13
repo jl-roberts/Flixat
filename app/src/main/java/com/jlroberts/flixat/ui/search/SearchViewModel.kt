@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.jlroberts.flixat.domain.repository.Repository
 import com.jlroberts.flixat.domain.model.MovieListResult
+import com.jlroberts.flixat.domain.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val repository: Repository) :
+class SearchViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
     ViewModel() {
 
     private var searchJob: Job? = null
@@ -29,7 +29,7 @@ class SearchViewModel @Inject constructor(private val repository: Repository) :
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(300L)
-            repository.search(query)
+            moviesRepository.search(query)
                 .cachedIn(viewModelScope)
                 .distinctUntilChanged()
                 .collectLatest {

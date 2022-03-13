@@ -14,6 +14,12 @@
         <action
             android:id="@+id/action_feedFragment_to_NowPlaying"
             app:destination="@id/nowPlayingFragment" />
+        <action
+            android:id="@+id/action_popularFragment_to_preferenceFragment"
+            app:destination="@id/preferenceFragment" />
+        <action
+            android:id="@+id/action_popularFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -56,6 +62,12 @@
         <argument
             android:name="movie_id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_nowPlayingFragment_to_preferenceFragment"
+            app:destination="@id/preferenceFragment" />
+        <action
+            android:id="@+id/action_nowPlayingFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -68,4 +80,12 @@
             android:name="movie_id"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/preferenceFragment"
+        android:name="com.jlroberts.flixat.ui.preferences.PreferencesFragment"
+        android:label="Preferences" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.jlroberts.flixat.ui.about.AboutFragment"
+        android:label="About Flixat" />
 </navigation>

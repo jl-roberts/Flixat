@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jlroberts.flixat.data.remote.model.asDomainModel
-import com.jlroberts.flixat.domain.repository.Repository
+import com.jlroberts.flixat.domain.repository.MoviesRepository
 import com.jlroberts.flixat.utils.DETAIL_RESPONSES_TO_APPEND
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @OptIn(InternalCoroutinesApi::class)
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val repository: Repository,
+    private val moviesRepository: MoviesRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -36,19 +36,21 @@ class DetailViewModel @Inject constructor(
 
     private fun getDetailMovie() {
         viewModelScope.launch {
-            repository.getMovieById(
+            moviesRepository.getMovieById(
                 movieId!!,
                 DETAIL_RESPONSES_TO_APPEND
             ).map { it.asDomainModel() }
                 .flowOn(Dispatchers.Default)
                 .catch { exception ->
                     when (exception) {
-                        is IOException -> savedStateHandle["state"] = state.value.copy(error = true, loading = false)
+                        is IOException -> savedStateHandle["state"] =
+                            state.value.copy(error = true, loading = false)
                         else -> logcat { "Error retrieving detail movie data, $exception.localizedMessage" }
                     }
                 }
                 .collect {
-                    savedStateHandle["state"] = state.value.copy(movie = it, loading = false, error = false)
+                    savedStateHandle["state"] =
+                        state.value.copy(movie = it, loading = false, error = false)
                     savedStateHandle["trailerKey"] = it.videos?.firstOrNull()?.key.toString()
                 }
         }

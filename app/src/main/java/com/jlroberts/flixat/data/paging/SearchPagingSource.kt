@@ -1,4 +1,4 @@
-package com.jlroberts.flixat.domain.paging
+package com.jlroberts.flixat.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

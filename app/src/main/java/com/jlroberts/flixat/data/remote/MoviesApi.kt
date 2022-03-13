@@ -16,7 +16,8 @@ interface MoviesApi {
     @GET("movie/now_playing/")
     suspend fun getNowPlaying(
         @Query("page") page: Int?,
-        @Query("language") language: String?
+        @Query("language") language: String?,
+        @Query("region") region: String?
     ): RemoteMovieListResponse
 
     @GET("search/movie/")

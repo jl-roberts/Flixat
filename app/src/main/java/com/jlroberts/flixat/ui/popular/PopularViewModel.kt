@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.jlroberts.flixat.domain.repository.Repository
 import com.jlroberts.flixat.data.local.asDomainModel
 import com.jlroberts.flixat.domain.model.MovieListResult
+import com.jlroberts.flixat.domain.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +17,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PopularViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class PopularViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
+    ViewModel() {
 
     private val _movies = MutableStateFlow<PagingData<MovieListResult>>(PagingData.empty())
     val movies = _movies.asStateFlow()
@@ -28,7 +29,7 @@ class PopularViewModel @Inject constructor(private val repository: Repository) :
 
     private fun getMovies() {
         viewModelScope.launch {
-            repository.popularMovies
+            moviesRepository.popularMovies
                 .cachedIn(viewModelScope)
                 .map { pagingData ->
                     pagingData.map { it.asDomainModel() }
