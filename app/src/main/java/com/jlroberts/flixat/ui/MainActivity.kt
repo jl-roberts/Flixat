@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var destinationChangedListener: NavController.OnDestinationChangedListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding.searchFab.setOnClickListener {
             navController.navigate(R.id.searchFragment)
         }
-        navController.addOnDestinationChangedListener { controller, destination, bundle ->
+        destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, bundle ->
             when (destination.id) {
                 R.id.detailFragment, R.id.detailFragment2, R.id.searchFragment, R.id.preferenceFragment, R.id.aboutFragment -> {
                     binding.bottomNav.visibility = View.GONE
@@ -50,5 +52,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        navController.addOnDestinationChangedListener(destinationChangedListener)
+    }
+
+    override fun onDestroy() {
+        navController.removeOnDestinationChangedListener(destinationChangedListener)
+        super.onDestroy()
     }
 }

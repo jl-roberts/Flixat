@@ -10,7 +10,6 @@ import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import com.jlroberts.flixat.databinding.RvMovieBinding
 import com.jlroberts.flixat.domain.model.MovieListResult
-import logcat.logcat
 
 class MovieAdapter(
     private val imageLoader: ImageLoader,

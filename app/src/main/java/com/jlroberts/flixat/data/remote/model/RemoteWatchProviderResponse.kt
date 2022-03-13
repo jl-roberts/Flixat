@@ -30,7 +30,7 @@ fun Results.asDomainModel(): List<WatchProvider> {
     if (US?.buy != null) {
         list.addAll(US.buy)
     }
-    val filtered = list.distinctBy { watchProvider -> watchProvider.providerId}
+    val filtered = list.distinctBy { watchProvider -> watchProvider.providerId }
     val filteredList = filtered.map { networkWatchProvider ->
         WatchProvider(
             displayPriority = networkWatchProvider.displayPriority,

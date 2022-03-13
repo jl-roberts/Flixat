@@ -22,7 +22,8 @@ class FlixatApp : Application() {
 
         val dataBindingComponent = bindingComponentProvider.get().build()
         val dataBindingEntryPoint = EntryPoints.get(
-            dataBindingComponent, BindingEntryPoint::class.java)
+            dataBindingComponent, BindingEntryPoint::class.java
+        )
 
         DataBindingUtil.setDefaultComponent(dataBindingEntryPoint)
     }

@@ -16,16 +16,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import coil.request.ImageRequest
-import coil.transform.RoundedCornersTransformation
-import com.google.android.material.chip.Chip
 import com.jlroberts.flixat.databinding.FragmentDetailBinding
 import com.jlroberts.flixat.domain.model.DetailMovie
-import com.jlroberts.flixat.ui.common.MovieAdapter
-import com.jlroberts.flixat.ui.nowplaying.NowPlayingFragmentDirections
 import com.jlroberts.flixat.utils.useClearStatusBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -82,12 +76,12 @@ class DetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    when(state.loading) {
+                    when (state.loading) {
                         true -> showLoading()
                         false -> hideLoading()
                     }
 
-                    when(state.error) {
+                    when (state.error) {
                         true -> showError()
                         false -> hideError()
                     }

@@ -25,7 +25,7 @@ class CastAdapter(private val imageLoader: ImageLoader) :
     class ViewHolder private constructor(private val binding: RvCastBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CastMember, imageLoader: ImageLoader) {
-            binding.castMember= item
+            binding.castMember = item
             val request = ImageRequest.Builder(binding.profilePicture.context)
                 .data(item.profilePath?.medium)
                 .target(binding.profilePicture)

@@ -9,4 +9,4 @@ data class DetailState(
     val movie: DetailMovie? = null,
     val loading: Boolean = true,
     val error: Boolean = false
-): Parcelable
+) : Parcelable

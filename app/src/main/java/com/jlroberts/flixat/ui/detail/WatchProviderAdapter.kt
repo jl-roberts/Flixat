@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
-import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
-import com.jlroberts.flixat.databinding.RvCastBinding
 import com.jlroberts.flixat.databinding.RvWatchProviderBinding
 import com.jlroberts.flixat.domain.model.WatchProvider
 
@@ -27,7 +25,7 @@ class WatchProviderAdapter(private val imageLoader: ImageLoader) :
     class ViewHolder private constructor(private val binding: RvWatchProviderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: WatchProvider, imageLoader: ImageLoader) {
-            binding.watchProvider= item
+            binding.watchProvider = item
             val request = ImageRequest.Builder(binding.logo.context)
                 .data(item.logoPath.medium)
                 .target(binding.logo)
