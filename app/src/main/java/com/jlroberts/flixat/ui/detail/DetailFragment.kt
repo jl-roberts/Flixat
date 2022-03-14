@@ -76,16 +76,6 @@ class DetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    when (state.loading) {
-                        true -> showLoading()
-                        false -> hideLoading()
-                    }
-
-                    when (state.error) {
-                        true -> showError()
-                        false -> hideError()
-                    }
-
                     binding.movie = state.movie
                     loadBackdrop(state.movie)
                     showTrailerButton(!state.movie?.videos.isNullOrEmpty())
@@ -94,22 +84,6 @@ class DetailFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    private fun showLoading() {
-        binding.loading.visibility = View.VISIBLE
-    }
-
-    private fun hideLoading() {
-        binding.loading.visibility = View.GONE
-    }
-
-    private fun showError() {
-        binding.retryLayout.visibility = View.VISIBLE
-    }
-
-    private fun hideError() {
-        binding.retryLayout.visibility = View.GONE
     }
 
     private fun loadBackdrop(movie: DetailMovie?) {

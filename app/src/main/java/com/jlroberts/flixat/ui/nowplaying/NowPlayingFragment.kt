@@ -18,12 +18,9 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.ImageLoader
 import com.google.android.gms.location.LocationServices
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.FragmentNowplayingBinding
 import com.jlroberts.flixat.ui.common.MovieAdapter
-import com.jlroberts.flixat.ui.popular.PopularFragmentDirections
 import com.jlroberts.flixat.utils.Permission
 import com.jlroberts.flixat.utils.PermissionManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -109,29 +106,23 @@ class NowPlayingFragment : Fragment() {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.isCountrySet.collect { countrySet ->
-                    if (countrySet) {
-                        viewModel.getMovies()
-                    } else {
+                viewModel.state.collectLatest { state ->
+                    if (state.country.isEmpty()) {
                         requestLocation()
                     }
-                }
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.movies.collectLatest { movies ->
-                    nowPlayingAdapter.submitData(movies)
+                    nowPlayingAdapter.submitData(state.movies)
                     binding.feedRefresh.isRefreshing = false
                 }
             }
         }
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 nowPlayingAdapter.loadStateFlow.collectLatest { loadState ->
-                    if (loadState.refresh is LoadState.Error || loadState.append is LoadState.Error) {
-                        showNoNetworkSnackbar()
-                    }
+                    viewModel.onLoading(loadState.refresh is LoadState.Loading
+                            || loadState.append is LoadState.Loading)
+                    viewModel.onError(loadState.refresh is LoadState.Error
+                            || loadState.append is LoadState.Error)
                 }
             }
         }
@@ -181,17 +172,6 @@ class NowPlayingFragment : Fragment() {
             return null
         }
         return result
-    }
-
-    private fun showNoNetworkSnackbar() {
-        val fab: FloatingActionButton = activity?.findViewById(R.id.search_fab)!!
-        val snackbar =
-            Snackbar.make(fab, "No internet connection, cannot refresh", Snackbar.LENGTH_LONG)
-                .apply {
-                    anchorView = fab
-                }.setAction("Retry") {
-                    nowPlayingAdapter.retry()
-                }.show()
     }
 
     override fun onDestroyView() {

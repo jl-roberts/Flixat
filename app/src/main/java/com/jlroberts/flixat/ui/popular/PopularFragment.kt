@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -118,14 +119,14 @@ class PopularFragment : Fragment() {
     }
 
     private fun showNoNetworkSnackbar() {
-        val fab: FloatingActionButton = activity?.findViewById(R.id.search_fab)!!
-        val snackbar =
-            Snackbar.make(fab, "No internet connection, cannot refresh", Snackbar.LENGTH_LONG)
-                .apply {
-                    anchorView = fab
-                }.setAction("Retry") {
-                    feedAdapter.retry()
-                }.show()
+        val coordinatorLayout: CoordinatorLayout = activity?.findViewById(R.id.main_activity_coordinator)!!
+        val fab: FloatingActionButton? = activity?.findViewById(R.id.search_fab)
+        Snackbar.make(coordinatorLayout, "No internet connection, cannot refresh", Snackbar.LENGTH_LONG)
+            .apply {
+                anchorView = fab
+            }.setAction("Retry") {
+                feedAdapter.retry()
+            }.show()
     }
 
     override fun onDestroyView() {

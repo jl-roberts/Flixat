@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
@@ -14,6 +15,7 @@ import com.jlroberts.flixat.domain.model.CastMember
 import com.jlroberts.flixat.domain.model.Genre
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.model.WatchProvider
+import com.jlroberts.flixat.ui.common.MovieAdapter
 import com.jlroberts.flixat.ui.detail.CastAdapter
 import com.jlroberts.flixat.ui.detail.SimilarMoviesAdapter
 import com.jlroberts.flixat.ui.detail.WatchProviderAdapter

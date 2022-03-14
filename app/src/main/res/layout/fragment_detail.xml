@@ -32,7 +32,7 @@
             android:id="@+id/retry_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:visibility="@{viewModel.state.error ? View.VISIBLE : View.GONE}"
             android:orientation="vertical"
             android:gravity="center">
 
@@ -66,7 +66,7 @@
             android:layout_width="300dp"
             android:layout_height="300dp"
             app:lottie_rawRes="@raw/loading"
-            android:visibility="gone"
+            android:visibility="@{viewModel.state.loading ? View.VISIBLE : View.GONE}"
             android:layout_centerInParent="true"
             app:lottie_autoPlay="true"
             app:lottie_loop="true" />
