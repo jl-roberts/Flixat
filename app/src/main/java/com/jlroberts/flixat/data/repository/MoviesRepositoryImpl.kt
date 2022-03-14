@@ -12,7 +12,6 @@ import com.jlroberts.flixat.data.remote.model.RemoteDetailMovie
 import com.jlroberts.flixat.di.IoDispatcher
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.repository.MoviesRepository
-import com.jlroberts.flixat.domain.repository.PreferencesRepository
 import com.jlroberts.flixat.utils.MOVIES_PAGE_SIZE
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +24,6 @@ class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
     private val database: FlixatDatabase,
     private val remoteMediator: MovieListRemoteMediator,
-    private val preferencesRepository: PreferencesRepository,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : MoviesRepository {
 

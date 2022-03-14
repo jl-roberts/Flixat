@@ -15,4 +15,5 @@
     <string name="dialog_permission_title">Permissions needed</string>
     <string name="dialog_permission_button_positive">OK</string>
     <string name="country_preference">Country</string>
+    <string name="theme_settings_preference">Theme settings</string>
 </resources>

@@ -13,9 +13,9 @@ import com.jlroberts.flixat.data.local.FlixatDatabase
 import com.jlroberts.flixat.data.paging.MovieListRemoteMediator
 import com.jlroberts.flixat.data.remote.MoviesApi
 import com.jlroberts.flixat.data.repository.MoviesRepositoryImpl
-import com.jlroberts.flixat.data.repository.PreferencesRepositoryImpl
+import com.jlroberts.flixat.data.repository.PreferencesManagerImpl
 import com.jlroberts.flixat.domain.repository.MoviesRepository
-import com.jlroberts.flixat.domain.repository.PreferencesRepository
+import com.jlroberts.flixat.domain.repository.PreferencesManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,14 +62,12 @@ class AppModule {
         moviesApi: MoviesApi,
         database: FlixatDatabase,
         remoteMediator: MovieListRemoteMediator,
-        preferencesRepository: PreferencesRepository,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): MoviesRepository {
         return MoviesRepositoryImpl(
             moviesApi,
             database,
             remoteMediator,
-            preferencesRepository,
             ioDispatcher
         )
     }
@@ -78,8 +76,8 @@ class AppModule {
     @Singleton
     fun providePreferenceRepository(
         preferenceStore: DataStore<Preferences>
-    ): PreferencesRepository {
-        return PreferencesRepositoryImpl(preferenceStore)
+    ): PreferencesManager {
+        return PreferencesManagerImpl(preferenceStore)
     }
 
     @Provides

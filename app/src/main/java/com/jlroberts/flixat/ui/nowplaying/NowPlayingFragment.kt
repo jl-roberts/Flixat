@@ -62,7 +62,6 @@ class NowPlayingFragment : Fragment() {
         setupToolbar()
         setupFeedList()
         setupObservers()
-        requestLocation()
 
         return binding.root
     }
@@ -74,11 +73,11 @@ class NowPlayingFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.about -> {
-                    findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToAboutFragment())
+                    findNavController().navigate(NowPlayingFragmentDirections.actionNowPlayingFragmentToAboutFragment())
                     return@setOnMenuItemClickListener true
                 }
                 R.id.preferences -> {
-                    findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToPreferenceFragment())
+                    findNavController().navigate(NowPlayingFragmentDirections.actionNowPlayingFragmentToPreferenceFragment())
                     return@setOnMenuItemClickListener true
                 }
                 else -> {
@@ -110,6 +109,17 @@ class NowPlayingFragment : Fragment() {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isCountrySet.collect { countrySet ->
+                    if (countrySet) {
+                        viewModel.getMovies()
+                    } else {
+                        requestLocation()
+                    }
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movies.collectLatest { movies ->
                     nowPlayingAdapter.submitData(movies)
                     binding.feedRefresh.isRefreshing = false
@@ -134,19 +144,16 @@ class NowPlayingFragment : Fragment() {
             .checkPermission { granted ->
                 if (granted) {
                     try {
-                        logcat { "permissions granted for location" }
                         val locationProviderClient =
                             LocationServices.getFusedLocationProviderClient(requireActivity())
                         locationProviderClient.lastLocation
                             .addOnCompleteListener(requireActivity()) { task ->
                                 if (task.isSuccessful) {
                                     task.result?.let { location ->
-                                        logcat { "location obtained: $location.latitude, $location.longitude" }
                                         viewLifecycleOwner.lifecycleScope.launch {
                                             val country =
                                                 getCountry(location.latitude, location.longitude)
                                             country?.let {
-                                                logcat { "Sending $country to viewmodel" }
                                                 viewModel.setCountry(country)
                                             }
                                         }
