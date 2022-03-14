@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/popularFragment"
         android:name="com.jlroberts.flixat.ui.popular.PopularFragment"
-        android:label="Flixat" >
+        android:label="Flixat">
         <action
             android:id="@+id/action_feedFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
@@ -20,11 +20,14 @@
         <action
             android:id="@+id/action_popularFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <argument
+            android:name="showBottomBar"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.jlroberts.flixat.ui.detail.DetailFragment"
-        android:label="" >
+        android:label="">
         <action
             android:id="@+id/action_detailFragment_to_feedFragment"
             app:destination="@id/popularFragment" />
@@ -34,28 +37,34 @@
         <action
             android:id="@+id/action_detailFragment_to_nowPlayingFragment"
             app:destination="@id/nowPlayingFragment" />
-        <argument
-            android:name="movieId"
-            app:argType="integer" />
         <action
             android:id="@+id/action_detailFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+        <argument
+            android:name="showBottomBar"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment2"
         android:name="com.jlroberts.flixat.ui.detail.DetailFragment"
-        android:label="" >
+        android:label="">
         <action
             android:id="@+id/action_detailFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
         <argument
             android:name="movieId"
             app:argType="integer" />
+        <argument
+            android:name="showBottomBar"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/nowPlayingFragment"
         android:name="com.jlroberts.flixat.ui.nowplaying.NowPlayingFragment"
-        android:label="Now playing" >
+        android:label="Now playing">
         <action
             android:id="@+id/action_nowPlaying_to_detailFragment"
             app:destination="@id/detailFragment" />
@@ -68,24 +77,38 @@
         <action
             android:id="@+id/action_nowPlayingFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <argument
+            android:name="showBottomBar"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.jlroberts.flixat.ui.search.SearchFragment"
-        android:label="SearchFragment" >
+        android:label="SearchFragment">
         <action
             android:id="@+id/action_searchFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
         <argument
             android:name="movie_id"
             app:argType="integer" />
+        <argument
+            android:name="showBottomBar"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/preferenceFragment"
         android:name="com.jlroberts.flixat.ui.preferences.PreferencesFragment"
-        android:label="Preferences" />
+        android:label="Preferences">
+        <argument
+            android:name="showBottomBar"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.jlroberts.flixat.ui.about.AboutFragment"
-        android:label="About Flixat" />
+        android:label="About Flixat">
+        <argument
+            android:name="showBottomBar"
+            android:defaultValue="false" />
+    </fragment>
 </navigation>

@@ -1,8 +1,8 @@
 package com.jlroberts.flixat.ui
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -38,17 +38,10 @@ class MainActivity : AppCompatActivity() {
         binding.searchFab.setOnClickListener {
             navController.navigate(R.id.searchFragment)
         }
-        destinationChangedListener = NavController.OnDestinationChangedListener { controller, destination, bundle ->
-            when (destination.id) {
-                R.id.detailFragment, R.id.detailFragment2, R.id.searchFragment, R.id.preferenceFragment, R.id.aboutFragment -> {
-                    binding.bottomNav.visibility = View.GONE
-                    binding.bottomAppBar.visibility = View.GONE
-                    binding.searchFab.visibility = View.GONE
-                }
-                else -> {
-                    binding.bottomAppBar.visibility = View.VISIBLE
-                    binding.bottomNav.visibility = View.VISIBLE
-                    binding.searchFab.visibility = View.VISIBLE
+        destinationChangedListener = NavController.OnDestinationChangedListener { _, _, bundle ->
+           with(listOf(binding.bottomNav, binding.bottomAppBar, binding.searchFab)) {
+                this.onEach {
+                    it.isVisible = bundle?.getBoolean("showBottomBar", true) == true
                 }
             }
         }
