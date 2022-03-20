@@ -30,10 +30,10 @@ fun RemoteMovieListResponse.asDatabaseModel(): List<MovieListResultDB> {
 }
 
 fun RemoteMovieListResponse.asDomainModel(): List<MovieListResult> {
-    return movieListResults.map {
+    return movieListResults.filter { it.posterPath != null }.map {
         MovieListResult(
             movieId = it.id,
-            posterPath = it.posterPath?.let { path -> Image(path) }
+            posterPath = Image(it.posterPath!!)
         )
     }
 }
