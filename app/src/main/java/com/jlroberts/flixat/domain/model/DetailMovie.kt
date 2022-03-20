@@ -9,7 +9,7 @@ data class DetailMovie(
     val adult: Boolean = false,
     val backdropPath: Image? = null,
     val budget: Int = 0,
-    val id: Long = 0L,
+    val id: Int = 0,
     val genres: List<Genre> = listOf(),
     val homepage: String? = null,
     val imdbId: String? = null,
@@ -27,8 +27,8 @@ data class DetailMovie(
     val voteAverage: Double = 0.0,
     val voteCount: Long = 0L,
     val videos: List<MovieTrailer>?,
-    val credits: List<CastMember>,
-    val similar: List<MovieListResult>,
+    val credits: List<CastMember>?,
+    val similar: List<MovieListResult>?,
     val watchProviders: List<WatchProvider>?,
     val externalIds: ExternalID
 ) : Parcelable

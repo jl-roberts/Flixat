@@ -13,9 +13,9 @@ interface MoviesRepository {
     val popularMovies: Flow<PagingData<MovieListResultDB>>
     suspend fun nowPlaying(region: String): Flow<PagingData<MovieListResult>>
     fun search(query: String): Flow<PagingData<MovieListResult>>
-    suspend fun getMovieById(movieId: Int, appendResponse: String): Flow<RemoteDetailMovie>
+    suspend fun getMovieById(movieId: Int, appendResponse: String): Flow<RemoteDetailMovie?>
     suspend fun insertAllMovies(movieList: List<MovieListResultDB>)
-    suspend fun getMovies(): Flow<PagingSource<Int, MovieListResultDB>>
+    suspend fun getMovies(): List<MovieListResultDB>
     suspend fun clearAllMovies()
     suspend fun insertAllKeys(remoteKey: List<MovieRemoteKey>)
     suspend fun remoteKeyByMovieId(movieId: Int): MovieRemoteKey?

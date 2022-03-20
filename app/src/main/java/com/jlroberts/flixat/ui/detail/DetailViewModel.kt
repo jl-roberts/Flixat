@@ -39,7 +39,7 @@ class DetailViewModel @Inject constructor(
             moviesRepository.getMovieById(
                 movieId!!,
                 DETAIL_RESPONSES_TO_APPEND
-            ).map { it.asDomainModel() }
+            ).map { it?.asDomainModel() }
                 .flowOn(Dispatchers.Default)
                 .catch { exception ->
                     when (exception) {
@@ -51,7 +51,7 @@ class DetailViewModel @Inject constructor(
                 .collect {
                     savedStateHandle["state"] =
                         state.value.copy(movie = it, loading = false, error = false)
-                    savedStateHandle["trailerKey"] = it.videos?.firstOrNull()?.key.toString()
+                    savedStateHandle["trailerKey"] = it?.videos?.firstOrNull()?.key.toString()
                 }
         }
     }

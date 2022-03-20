@@ -9,7 +9,7 @@ data class RemoteDetailMovie(
     @Json(name = "backdrop_path")
     val backdropPath: String?,
     val budget: Int,
-    val id: Long,
+    val id: Int,
     val genres: List<RemoteGenre>,
     val homepage: String?,
     @Json(name = "imdb_id")
@@ -33,13 +33,13 @@ data class RemoteDetailMovie(
     val voteAverage: Double,
     @Json(name = "vote_count")
     val voteCount: Long,
-    val videos: RemoteTrailersResponse,
-    val credits: RemoteMovieCredit,
-    val similar: RemoteSimilarMoviesResponse,
+    val videos: RemoteTrailersResponse?,
+    val credits: RemoteMovieCredit?,
+    val similar: RemoteSimilarMoviesResponse?,
     @Json(name = "watch/providers")
-    val watchProviders: RemoteWatchProviderResponse,
+    val watchProviders: RemoteWatchProviderResponse?,
     @Json(name = "external_ids")
-    val externalIds: RemoteExternalID
+    val externalIds: RemoteExternalID?
 )
 
 fun RemoteDetailMovie.asDomainModel(): DetailMovie {
@@ -57,7 +57,7 @@ fun RemoteDetailMovie.asDomainModel(): DetailMovie {
         overview = overview,
         popularity = popularity,
         posterPath = posterPath?.let { path -> Image(path) },
-        releaseDate = releaseDate?.let { date ->
+        releaseDate = releaseDate.let { date ->
             if (date.isNotEmpty()) {
                 SimpleDateFormat("yyyy-mm-dd", java.util.Locale.getDefault()).parse(date)
             } else {
@@ -75,7 +75,7 @@ fun RemoteDetailMovie.asDomainModel(): DetailMovie {
         status = status,
         runtime = runtime,
         tagline = tagline,
-        videos = videos.results.filter { it.type == "Trailer" && it.site == "YouTube" }.map {
+        videos = videos?.results?.filter { it.type == "Trailer" && it.site == "YouTube" }?.map {
             MovieTrailer(
                 id = it.id,
                 key = it.key,
@@ -85,7 +85,7 @@ fun RemoteDetailMovie.asDomainModel(): DetailMovie {
                 type = it.type
             )
         },
-        credits = credits.cast.map {
+        credits = credits?.cast?.map {
             CastMember(
                 castId = it.castId,
                 character = it.character,
@@ -96,18 +96,18 @@ fun RemoteDetailMovie.asDomainModel(): DetailMovie {
                 profilePath = it.profilePath?.let { path -> Image(path) }
             )
         },
-        similar = similar.results.map {
+        similar = similar?.results?.map {
             MovieListResult(
                 movieId = it.id,
                 posterPath = it.posterPath?.let { path -> Image(path) }
             )
         },
-        watchProviders = watchProviders.results?.asDomainModel(),
+        watchProviders = watchProviders?.results?.asDomainModel(),
         externalIds = ExternalID(
-            imdbId = externalIds.imdbId,
-            facebookId = externalIds.facebookId,
-            instagramId = externalIds.instagramId,
-            twitterId = externalIds.twitterId
+            imdbId = externalIds?.imdbId,
+            facebookId = externalIds?.facebookId,
+            instagramId = externalIds?.instagramId,
+            twitterId = externalIds?.twitterId
         )
     )
 }

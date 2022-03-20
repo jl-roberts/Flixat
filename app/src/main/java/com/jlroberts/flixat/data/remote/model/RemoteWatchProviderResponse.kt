@@ -34,7 +34,7 @@ fun Results.asDomainModel(): List<WatchProvider> {
     val filteredList = filtered.map { networkWatchProvider ->
         WatchProvider(
             displayPriority = networkWatchProvider.displayPriority,
-            logoPath = networkWatchProvider.logoPath?.let { path -> Image(path) },
+            logoPath = Image(networkWatchProvider.logoPath),
             providerId = networkWatchProvider.providerId,
             providerName = networkWatchProvider.providerName
         )

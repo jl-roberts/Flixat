@@ -41,7 +41,6 @@ class MovieListRemoteMediator(
                 return MediatorResult.Success(endOfPaginationReached = true)
             }
             LoadType.APPEND -> {
-                val lastItem = state.lastItemOrNull()
                 val remoteKey = database.withTransaction {
                     database.movieRemoteKeysDao().remoteKeys()?.sortedBy { it.nextKey }?.last()
                 }

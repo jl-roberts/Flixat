@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieListResultDao {
@@ -14,6 +15,9 @@ interface MovieListResultDao {
 
     @Query("SELECT * FROM movielistresultdb ORDER BY id ASC")
     fun getMovies(): PagingSource<Int, MovieListResultDB>
+
+    @Query("SELECT * FROM MovieListResultDB ORDER BY id ASC")
+    suspend fun getMoviesList(): List<MovieListResultDB>
 
     @Query("DELETE FROM movielistresultdb")
     suspend fun clearAllMovies()

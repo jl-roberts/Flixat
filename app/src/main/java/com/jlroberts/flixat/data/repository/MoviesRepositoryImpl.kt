@@ -61,18 +61,19 @@ class MoviesRepositoryImpl(
     override suspend fun getMovieById(
         movieId: Int,
         appendResponse: String
-    ): Flow<RemoteDetailMovie> = flow {
+    ): Flow<RemoteDetailMovie?> = flow {
         emit(moviesApi.getMovieById(movieId, appendResponse))
     }.flowOn(dispatcher)
 
     override suspend fun insertAllMovies(movieList: List<MovieListResultDB>) {
-        withContext(Dispatchers.IO) {
+        withContext(dispatcher) {
             database.movieListResultDao().insertAllMovies(movieList)
         }
     }
 
-    override suspend fun getMovies(): Flow<PagingSource<Int, MovieListResultDB>> =
-        flow { emit(database.movieListResultDao().getMovies()) }.flowOn(dispatcher)
+    override suspend fun getMovies() : List<MovieListResultDB> {
+        return database.movieListResultDao().getMoviesList()
+    }
 
     override suspend fun clearAllMovies() = database.movieListResultDao().clearAllMovies()
 

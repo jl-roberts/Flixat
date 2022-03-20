@@ -29,6 +29,6 @@ interface MoviesApi {
     @GET("movie/{movie_id}")
     suspend fun getMovieById(
         @Path("movie_id") movieID: Int,
-        @Query("append_to_response") appendResponse: String
-    ): RemoteDetailMovie
+        @Query("append_to_response") appendResponse: String?
+    ): RemoteDetailMovie?
 }

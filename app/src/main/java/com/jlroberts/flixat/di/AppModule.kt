@@ -75,9 +75,10 @@ class AppModule {
     @Provides
     @Singleton
     fun providePreferenceRepository(
-        preferenceStore: DataStore<Preferences>
+        preferenceStore: DataStore<Preferences>,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): PreferencesManager {
-        return PreferencesManagerImpl(preferenceStore)
+        return PreferencesManagerImpl(preferenceStore, ioDispatcher)
     }
 
     @Provides
