@@ -1,7 +1,7 @@
 package com.jlroberts.flixat.data.repository
 
+import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
-import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.core.app.ApplicationProvider
 import com.jlroberts.flixat.ui.preferences.Theme
@@ -17,6 +17,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.robolectric.annotation.Config
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltAndroidTest
@@ -32,7 +33,7 @@ class PreferencesManagerImplTest {
         scope = testScope,
         produceFile = {
             ApplicationProvider.getApplicationContext<HiltTestApplication>()
-                .preferencesDataStoreFile("settings")
+                .preferencesDataStoreFile("test_settings")
         })
     private val preferencesManager = PreferencesManagerImpl(preferenceStore, testDispatcher)
 
@@ -41,20 +42,16 @@ class PreferencesManagerImplTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testScope.launch {
-            preferenceStore.edit { preferences ->
-                preferences.clear()
-            }
-            testScope.cancel()
-        }
-
+        File(
+            ApplicationProvider.getApplicationContext<Context>().filesDir,
+            "datastore"
+        ).deleteRecursively()
+        testScope.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveAndRetrieveCountryCode() = testScope.runTest {
         preferencesManager.saveCountryCode("Test")
@@ -64,7 +61,6 @@ class PreferencesManagerImplTest {
         assertEquals("Test", result)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveAndRetrieveTheme() = testScope.runTest {
         preferencesManager.saveTheme(Theme.ThemeDark)
@@ -74,7 +70,6 @@ class PreferencesManagerImplTest {
         assertEquals(Theme.ThemeDark, result)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun isCountrySet() = testScope.runTest {
         preferencesManager.saveCountryCode("Test")
@@ -84,7 +79,6 @@ class PreferencesManagerImplTest {
         assertEquals(true, result)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun clearCountryCode() = testScope.runTest {
         preferencesManager.saveCountryCode("Test")
