@@ -21,6 +21,7 @@ import org.robolectric.annotation.Config
 
 @HiltAndroidTest
 @Config(application = HiltTestApplication::class)
+@OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
 class MovieListRemoteMediatorTest {
 
     private val mockMovies = RemoteMovieListResponse(
@@ -51,8 +52,6 @@ class MovieListRemoteMediatorTest {
         mockApi.clearMovies()
     }
 
-    @ExperimentalPagingApi
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun refreshLoadReturnsSuccessResultWhenMoreDataIsPresent() = runTest {
         mockApi.addMovies(mockMovies)
@@ -71,7 +70,6 @@ class MovieListRemoteMediatorTest {
         assertFalse((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
     }
 
-    @OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
     @Test
     fun refreshLoadSuccessAndEndOfPaginationWhenNoMoreData() = runTest {
         val remoteMediator = MovieListRemoteMediator(
@@ -89,7 +87,6 @@ class MovieListRemoteMediatorTest {
         assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
     }
 
-    @OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
     @Test
     fun refreshLoadReturnsErrorResultWhenErrorOccurs() = runTest {
         mockApi.setReturnError(true)

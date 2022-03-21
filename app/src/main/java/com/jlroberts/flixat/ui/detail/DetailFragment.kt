@@ -1,9 +1,6 @@
 package com.jlroberts.flixat.ui.detail
 
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +41,14 @@ class DetailFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
+        setupRecyclerViews()
+        setupListeners()
+        setupObservers()
+
+        return binding.root
+    }
+
+    private fun setupRecyclerViews() {
         val castAdapter = CastAdapter(imageLoader)
         binding.castRecycler.adapter = castAdapter
 
@@ -58,32 +63,6 @@ class DetailFragment : Fragment() {
 
         val watchProviderAdapter = WatchProviderAdapter(imageLoader)
         binding.providerRecycler.adapter = watchProviderAdapter
-        binding.retryButton.setOnClickListener {
-            viewModel.retry()
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.collect { event ->
-                    when (event) {
-                        is DetailEvent.TrailerClicked -> launchTrailer()
-                        is DetailEvent.BackClicked -> navigateUp()
-                    }
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { state ->
-                    binding.movie = state.movie
-                    loadBackdrop(state.movie)
-                    showTrailerButton(!state.movie?.videos.isNullOrEmpty())
-                }
-            }
-        }
-
-        return binding.root
     }
 
     private fun loadBackdrop(movie: DetailMovie?) {
@@ -101,25 +80,31 @@ class DetailFragment : Fragment() {
         imageLoader.enqueue(request)
     }
 
-    private fun showTrailerButton(show: Boolean) {
-        if (show) {
-            binding.trailerButton.visibility = View.VISIBLE
+    private fun setupListeners() {
+        binding.retryButton.setOnClickListener {
+            viewModel.retry()
+        }
+        binding.backButton.setOnClickListener {
+            navigateUp()
         }
     }
 
-    private fun launchTrailer() {
-        val appIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("vnd.youtube:" + viewModel.trailerKey)
-        )
-        val webIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("http://www.youtube.com/watch?v=" + viewModel.trailerKey)
-        )
-        try {
-            startActivity(appIntent)
-        } catch (e: ActivityNotFoundException) {
-            startActivity(webIntent)
+    @SuppressLint("UnsafeRepeatOnLifecycleDetector")
+    private fun setupObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { state ->
+                    binding.movie = state.movie
+                    loadBackdrop(state.movie)
+                    showTrailerButton(!state.movie?.videos.isNullOrEmpty())
+                }
+            }
+        }
+    }
+
+    private fun showTrailerButton(show: Boolean) {
+        if (show) {
+            binding.trailerButton.visibility = View.VISIBLE
         }
     }
 

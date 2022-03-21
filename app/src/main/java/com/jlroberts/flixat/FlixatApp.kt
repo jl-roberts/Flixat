@@ -7,9 +7,6 @@ import com.jlroberts.flixat.di.BindingComponentBuilder
 import com.jlroberts.flixat.di.BindingEntryPoint
 import com.jlroberts.flixat.domain.repository.PreferencesManager
 import com.jlroberts.flixat.ui.preferences.Theme
-import com.jlroberts.flixat.utils.THEME_AUTO
-import com.jlroberts.flixat.utils.THEME_DARK
-import com.jlroberts.flixat.utils.THEME_LIGHT
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.*

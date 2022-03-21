@@ -119,10 +119,14 @@ class NowPlayingFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 nowPlayingAdapter.loadStateFlow.collectLatest { loadState ->
-                    viewModel.onLoading(loadState.refresh is LoadState.Loading
-                            || loadState.append is LoadState.Loading)
-                    viewModel.onError(loadState.refresh is LoadState.Error
-                            || loadState.append is LoadState.Error)
+                    viewModel.onLoading(
+                        loadState.refresh is LoadState.Loading
+                                || loadState.append is LoadState.Loading
+                    )
+                    viewModel.onError(
+                        loadState.refresh is LoadState.Error
+                                || loadState.append is LoadState.Error
+                    )
                 }
             }
         }

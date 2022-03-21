@@ -23,6 +23,7 @@ import org.robolectric.annotation.Config
 
 @HiltAndroidTest
 @Config(application = HiltTestApplication::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class MoviesRepositoryImplTest {
 
     private val database = Room.inMemoryDatabaseBuilder(
@@ -61,7 +62,6 @@ class MoviesRepositoryImplTest {
             )
         )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private val repository = MoviesRepositoryImpl(
         database = database,
         moviesApi = moviesApi,
@@ -75,7 +75,6 @@ class MoviesRepositoryImplTest {
         moviesApi.clearMovies()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getMovieById() = runTest {
         moviesApi.addMovies(mockMovies)
@@ -85,7 +84,6 @@ class MoviesRepositoryImplTest {
         assertEquals(id, result?.id)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertAllMovies() = runTest {
         repository.insertAllMovies(mockMovies.asDatabaseModel())
@@ -97,7 +95,6 @@ class MoviesRepositoryImplTest {
         assertEquals(mockMovies.movieListResults.size, results.size)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun clearAllMovies() = runTest {
         repository.insertAllMovies(mockMovies.asDatabaseModel())
@@ -107,7 +104,6 @@ class MoviesRepositoryImplTest {
         assertEquals(0, results.size)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertAndGetAllKeys() = runTest {
         repository.insertAllKeys(keys)
@@ -116,7 +112,6 @@ class MoviesRepositoryImplTest {
         assertEquals(3, results?.size)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun remoteKeyByMovieId() = runTest {
         repository.insertAllKeys(keys)
@@ -126,7 +121,6 @@ class MoviesRepositoryImplTest {
         assertEquals(id, results?.movieId)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun clearAllKeys() = runTest {
         repository.insertAllKeys(keys)

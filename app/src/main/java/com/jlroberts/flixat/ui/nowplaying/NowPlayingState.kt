@@ -13,4 +13,4 @@ data class NowPlayingState(
     val country: String = "",
     val loading: Boolean = false,
     val error: Boolean = false
-    ) : Parcelable
+) : Parcelable

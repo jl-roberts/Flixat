@@ -1,7 +1,6 @@
 package com.jlroberts.flixat.domain.repository
 
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
 import com.jlroberts.flixat.data.local.MovieListResultDB
 import com.jlroberts.flixat.data.local.MovieRemoteKey
 import com.jlroberts.flixat.data.remote.model.RemoteDetailMovie

@@ -1,21 +1,23 @@
 package com.jlroberts.flixat.utils
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.net.Uri
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.BindingAdapter
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.jlroberts.flixat.domain.model.CastMember
 import com.jlroberts.flixat.domain.model.Genre
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.model.WatchProvider
-import com.jlroberts.flixat.ui.common.MovieAdapter
 import com.jlroberts.flixat.ui.detail.CastAdapter
 import com.jlroberts.flixat.ui.detail.SimilarMoviesAdapter
 import com.jlroberts.flixat.ui.detail.WatchProviderAdapter
@@ -68,6 +70,25 @@ class BindingAdapters @Inject constructor(private val imageLoader: ImageLoader) 
                 val chip = Chip(chipGroup.context)
                 chip.text = genre.name
                 chipGroup.addView(chip)
+            }
+        }
+    }
+
+    @BindingAdapter("trailerKey")
+    fun bindTrailerKey(button: MaterialButton, key: String) {
+        button.setOnClickListener {
+            val appIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("vnd.youtube:$key")
+            )
+            val webIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=$key")
+            )
+            try {
+                startActivity(button.context, appIntent, null)
+            } catch (e: ActivityNotFoundException) {
+                startActivity(button.context, webIntent, null)
             }
         }
     }

@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.searchFragment)
         }
         destinationChangedListener = NavController.OnDestinationChangedListener { _, _, bundle ->
-           with(listOf(binding.bottomNav, binding.bottomAppBar, binding.searchFab)) {
+            with(listOf(binding.bottomNav, binding.bottomAppBar, binding.searchFab)) {
                 this.onEach {
                     it.isVisible = bundle?.getBoolean("showBottomBar", true) == true
                 }

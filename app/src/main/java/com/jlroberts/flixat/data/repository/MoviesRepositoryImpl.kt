@@ -1,6 +1,9 @@
 package com.jlroberts.flixat.data.repository
 
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.jlroberts.flixat.data.local.FlixatDatabase
 import com.jlroberts.flixat.data.local.MovieListResultDB
 import com.jlroberts.flixat.data.local.MovieRemoteKey
@@ -14,7 +17,6 @@ import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.repository.MoviesRepository
 import com.jlroberts.flixat.utils.MOVIES_PAGE_SIZE
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -71,7 +73,7 @@ class MoviesRepositoryImpl(
         }
     }
 
-    override suspend fun getMovies() : List<MovieListResultDB> {
+    override suspend fun getMovies(): List<MovieListResultDB> {
         return database.movieListResultDao().getMoviesList()
     }
 

@@ -16,6 +16,7 @@ import org.robolectric.annotation.Config
 
 @HiltAndroidTest
 @Config(application = HiltTestApplication::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class NowPlayingPagingSourceTest {
 
     private val mockMovies = RemoteMovieListResponse(
@@ -37,7 +38,6 @@ class NowPlayingPagingSourceTest {
         mockApi.clearMovies()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun loadReturnsPageWhenOnSuccessfulLoadOfData() = runTest {
         val pagingSource = NowPlayingPagingSource(mockApi, "US")

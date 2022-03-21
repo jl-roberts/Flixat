@@ -119,9 +119,14 @@ class PopularFragment : Fragment() {
     }
 
     private fun showNoNetworkSnackbar() {
-        val coordinatorLayout: CoordinatorLayout = activity?.findViewById(R.id.main_activity_coordinator)!!
+        val coordinatorLayout: CoordinatorLayout =
+            activity?.findViewById(R.id.main_activity_coordinator)!!
         val fab: FloatingActionButton? = activity?.findViewById(R.id.search_fab)
-        Snackbar.make(coordinatorLayout, "No internet connection, cannot refresh", Snackbar.LENGTH_LONG)
+        Snackbar.make(
+            coordinatorLayout,
+            "No internet connection, cannot refresh",
+            Snackbar.LENGTH_LONG
+        )
             .apply {
                 anchorView = fab
             }.setAction("Retry") {
