@@ -101,8 +101,11 @@ class PopularFragment : Fragment() {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.movies.collectLatest { movies ->
-                    feedAdapter.submitData(movies)
+                viewModel.state.collectLatest { state ->
+                    if (!state.onboardingComplete) {
+                        navigateToOnboarding()
+                    }
+                    feedAdapter.submitData(state.movies)
                     binding.feedRefresh.isRefreshing = false
                 }
             }
@@ -116,6 +119,10 @@ class PopularFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun navigateToOnboarding() {
+        findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToOnboardingFragment())
     }
 
     private fun showNoNetworkSnackbar() {

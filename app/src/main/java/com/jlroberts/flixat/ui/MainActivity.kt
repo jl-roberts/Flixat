@@ -14,14 +14,15 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
     private lateinit var navController: NavController
     private lateinit var destinationChangedListener: NavController.OnDestinationChangedListener
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
         val navHostFragment =
@@ -51,5 +52,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         navController.removeOnDestinationChangedListener(destinationChangedListener)
         super.onDestroy()
+        _binding = null
     }
 }

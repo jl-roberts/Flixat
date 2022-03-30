@@ -118,4 +118,9 @@ class PreferencesFragment : Fragment() {
             .create().show()
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

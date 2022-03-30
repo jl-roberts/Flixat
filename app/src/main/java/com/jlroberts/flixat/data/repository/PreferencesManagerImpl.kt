@@ -26,6 +26,7 @@ class PreferencesManagerImpl(
         val COUNTRY_CODE = stringPreferencesKey("country_code")
         val COUNTRY_SET = booleanPreferencesKey("country_set")
         val THEME = intPreferencesKey("theme")
+        val ONBOARDING_COMPLETE = booleanPreferencesKey("onboarding_complete")
     }
 
     override suspend fun saveCountryCode(code: String) {
@@ -96,6 +97,26 @@ class PreferencesManagerImpl(
                 THEME_AUTO -> Theme.ThemeSystem
                 else -> Theme.ThemeSystem
             }
+        }.flowOn(dispatcher)
+    }
+
+    override suspend fun setOnboardingComplete() {
+        withContext(dispatcher) {
+            preferenceStore.edit { preferences ->
+                preferences[ONBOARDING_COMPLETE] = true
+            }
+        }
+    }
+
+    override suspend fun getOnboardingStatus(): Flow<Boolean> {
+        return preferenceStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.map { preferences ->
+            preferences[ONBOARDING_COMPLETE] ?: false
         }.flowOn(dispatcher)
     }
 }

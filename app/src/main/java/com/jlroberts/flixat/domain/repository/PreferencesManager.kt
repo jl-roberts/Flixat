@@ -11,4 +11,6 @@ interface PreferencesManager {
     suspend fun getCountryCode(): Flow<String>
     suspend fun clearCountryCode()
     suspend fun getTheme(): Flow<Theme>
+    suspend fun getOnboardingStatus(): Flow<Boolean>
+    suspend fun setOnboardingComplete()
 }

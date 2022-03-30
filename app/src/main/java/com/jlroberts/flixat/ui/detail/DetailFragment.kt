@@ -11,8 +11,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import coil.ImageLoader
 import coil.request.ImageRequest
+import com.google.android.material.appbar.AppBarLayout
 import com.jlroberts.flixat.databinding.FragmentDetailBinding
 import com.jlroberts.flixat.domain.model.DetailMovie
 import com.jlroberts.flixat.utils.useClearStatusBar
@@ -31,7 +34,6 @@ class DetailFragment : Fragment() {
 
     private val viewModel by viewModels<DetailViewModel>()
 
-    @SuppressLint("UnsafeRepeatOnLifecycleDetector")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,11 +43,24 @@ class DetailFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
+        setupToolbar()
         setupRecyclerViews()
         setupListeners()
         setupObservers()
 
         return binding.root
+    }
+
+    private fun setupToolbar() {
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        binding.toolbar.setupWithNavController(findNavController(), appBarConfiguration)
+        binding.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener() { appBarLayout, verticalOffset ->
+            if (verticalOffset != 0) {
+                appBarLayout.visibility = View.INVISIBLE
+            } else {
+                appBarLayout.visibility = View.VISIBLE
+            }
+        })
     }
 
     private fun setupRecyclerViews() {
@@ -70,10 +85,9 @@ class DetailFragment : Fragment() {
             .data(movie?.backdropPath?.original)
             .target(binding.backdrop)
             .listener(
-                onStart = {
+                onSuccess = { request, metadata ->
                     binding.backdropScrim.visibility = View.VISIBLE
-                }
-            )
+                })
             .crossfade(true)
             .crossfade(200)
             .build()
@@ -83,9 +97,6 @@ class DetailFragment : Fragment() {
     private fun setupListeners() {
         binding.retryButton.setOnClickListener {
             viewModel.retry()
-        }
-        binding.backButton.setOnClickListener {
-            navigateUp()
         }
     }
 
@@ -106,10 +117,6 @@ class DetailFragment : Fragment() {
         if (show) {
             binding.trailerButton.visibility = View.VISIBLE
         }
-    }
-
-    private fun navigateUp() {
-        findNavController().navigateUp()
     }
 
     override fun onStart() {

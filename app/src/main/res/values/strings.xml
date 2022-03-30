@@ -16,4 +16,7 @@
     <string name="dialog_permission_button_positive">OK</string>
     <string name="country_preference">Country</string>
     <string name="theme_settings_preference">Theme settings</string>
+    <string name="no_connection">No internet connection, please retry.</string>
+    <string name="retry">Retry</string>
+    <string name="continue_text">Continue</string>
 </resources>

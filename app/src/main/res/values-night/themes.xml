@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.Flixat" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:statusBarColor">@color/md_theme_dark_primaryContainer</item>
         <item name="colorPrimary">@color/md_theme_dark_primary</item>

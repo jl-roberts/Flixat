@@ -4,12 +4,10 @@ import android.app.Activity
 import android.view.WindowManager
 
 fun Activity.useClearStatusBar(enabled: Boolean) {
-    val params = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+    val flags = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
     if (enabled) {
-        this.window.setFlags(
-            params, params
-        )
+        window.addFlags(flags)
     } else {
-        this.window.clearFlags(params)
+        window.clearFlags(flags)
     }
 }

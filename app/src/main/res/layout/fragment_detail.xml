@@ -24,63 +24,91 @@
             type="List&lt;WatchProvider&gt;" />
     </data>
 
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/retry_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="@{viewModel.state.error ? View.VISIBLE : View.GONE}"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/no_network"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                app:lottie_rawRes="@raw/network_lottie"
-                android:layout_above="@id/retry_button"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No internet connection, please retry."
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/retry_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="32dp"
-                android:text="Retry" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/loading"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            app:lottie_rawRes="@raw/loading"
-            android:visibility="@{viewModel.state.loading ? View.VISIBLE : View.GONE}"
-            android:layout_centerInParent="true"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true" />
-
-        <ScrollView
-            android:id="@+id/content"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:background="@null"
+            android:fitsSystemWindows="true"
+            android:translationZ="1dp"
+            app:liftOnScroll="true">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/DetailToolbar"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/retry_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.state.error ? View.VISIBLE : View.GONE}">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/no_network"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_above="@id/retry_button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/network_lottie" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/no_network_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_connection"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/no_network" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/retry_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/retry"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/no_network_message" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loading"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerInParent="true"
+                android:visibility="@{viewModel.state.loading ? View.VISIBLE : View.GONE}"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading" />
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true">
+                android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/backdrop"
@@ -100,18 +128,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/back_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
-                    android:contentDescription="@string/detail_back_content_description"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_baseline_arrow_back_24"
-                    app:tint="@color/md_theme_dark_onSurface" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/movie_image"
@@ -178,6 +194,7 @@
                     tools:text="1009" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/runtime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -205,7 +222,8 @@
                         android:layout_margin="16dp"
                         android:paddingEnd="24dp"
                         app:chipData="@{movie.genres}"
-                        app:singleLine="true" />
+                        app:singleLine="true"
+                        tools:ignore="RtlSymmetry" />
                 </HorizontalScrollView>
 
                 <com.google.android.material.textview.MaterialTextView
@@ -241,12 +259,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="48dp"
                     android:layout_marginRight="48dp"
-                    app:trailerKey="@{viewModel.state.trailerKey}"
                     android:text="@string/detail_view_trailer_btn_text"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cast_recycler" />
+                    app:layout_constraintTop_toBottomOf="@id/cast_recycler"
+                    app:trailerKey="@{viewModel.state.trailerKey}" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/overview_label"
@@ -329,6 +347,6 @@
                     app:layout_constraintTop_toBottomOf="@id/provider_label"
                     app:watchProviderData="@{movie.watchProviders}" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
-    </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -8,6 +8,7 @@ import androidx.paging.map
 import com.jlroberts.flixat.data.local.asDomainModel
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.repository.MoviesRepository
+import com.jlroberts.flixat.domain.repository.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,11 +18,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PopularViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
+class PopularViewModel @Inject constructor(
+    private val moviesRepository: MoviesRepository,
+    private val preferencesManager: PreferencesManager
+) :
     ViewModel() {
 
-    private val _movies = MutableStateFlow<PagingData<MovieListResult>>(PagingData.empty())
-    val movies = _movies.asStateFlow()
+    private val _state = MutableStateFlow(PopularState())
+    val state = _state.asStateFlow()
 
     init {
         getMovies()
@@ -29,13 +33,16 @@ class PopularViewModel @Inject constructor(private val moviesRepository: MoviesR
 
     private fun getMovies() {
         viewModelScope.launch {
-            moviesRepository.popularMovies
-                .cachedIn(viewModelScope)
-                .map { pagingData ->
-                    pagingData.map { it.asDomainModel() }
-                }.collectLatest {
-                    _movies.value = it
-                }
+            preferencesManager.getOnboardingStatus().collectLatest { onboardingComplete ->
+                _state.value = state.value.copy(onboardingComplete = onboardingComplete)
+                moviesRepository.popularMovies
+                    .cachedIn(viewModelScope)
+                    .map { pagingData ->
+                        pagingData.map { it.asDomainModel() }
+                    }.collectLatest {
+                        _state.value = state.value.copy(movies = it)
+                    }
+            }
         }
     }
 }
