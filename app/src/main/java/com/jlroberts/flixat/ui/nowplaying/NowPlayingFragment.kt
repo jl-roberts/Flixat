@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -18,26 +18,25 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.ImageLoader
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.transition.MaterialFadeThrough
 import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.FragmentNowplayingBinding
 import com.jlroberts.flixat.ui.common.MovieAdapter
 import com.jlroberts.flixat.utils.Permission
 import com.jlroberts.flixat.utils.PermissionManager
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import logcat.logcat
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.IOException
 import java.util.*
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class NowPlayingFragment : Fragment() {
 
-    @Inject
-    lateinit var imageLoader: ImageLoader
+    val imageLoader: ImageLoader by inject()
 
-    private val viewModel by viewModels<NowPlayingViewModel>()
+    val viewModel: NowPlayingViewModel by viewModel()
 
     private var _binding: FragmentNowplayingBinding? = null
     private val binding get() = _binding!!
@@ -56,11 +55,14 @@ class NowPlayingFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupFeedList()
         setupObservers()
-
-        return binding.root
     }
 
     private fun setupToolbar() {
@@ -70,11 +72,17 @@ class NowPlayingFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.about -> {
-                    findNavController().navigate(NowPlayingFragmentDirections.actionNowPlayingFragmentToAboutFragment())
+                    findNavController().navigate(
+                        NowPlayingFragmentDirections
+                            .actionNowPlayingFragmentToAboutFragment()
+                    )
                     return@setOnMenuItemClickListener true
                 }
                 R.id.preferences -> {
-                    findNavController().navigate(NowPlayingFragmentDirections.actionNowPlayingFragmentToPreferenceFragment())
+                    findNavController().navigate(
+                        NowPlayingFragmentDirections
+                            .actionNowPlayingFragmentToPreferenceFragment()
+                    )
                     return@setOnMenuItemClickListener true
                 }
                 else -> {

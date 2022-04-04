@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -18,13 +17,12 @@ import com.jlroberts.flixat.databinding.FragmentPreferencesBinding
 import com.jlroberts.flixat.utils.THEME_AUTO
 import com.jlroberts.flixat.utils.THEME_DARK
 import com.jlroberts.flixat.utils.THEME_LIGHT
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class PreferencesFragment : Fragment() {
 
-    private val viewModel by viewModels<PreferencesViewModel>()
+    val viewModel: PreferencesViewModel by viewModel()
 
     private var _binding: FragmentPreferencesBinding? = null
     private val binding get() = _binding!!
@@ -33,16 +31,19 @@ class PreferencesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPreferencesBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupListeners()
         setupObservers()
-
-        return binding.root
     }
 
     private fun setupToolbar() {

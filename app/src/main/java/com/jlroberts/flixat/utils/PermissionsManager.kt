@@ -40,11 +40,6 @@ class PermissionManager private constructor(private val fragment: WeakReference<
         handlePermissionRequest()
     }
 
-    fun checkDetailedPermission(callback: (Map<Permission, Boolean>) -> Unit) {
-        this.detailedCallback = callback
-        handlePermissionRequest()
-    }
-
     private fun handlePermissionRequest() {
         fragment.get()?.let { fragment ->
             when {

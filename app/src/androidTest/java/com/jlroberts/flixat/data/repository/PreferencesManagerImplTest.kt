@@ -4,10 +4,8 @@ import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jlroberts.flixat.ui.preferences.Theme
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -17,25 +15,20 @@ import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
+import org.junit.runner.RunWith
 import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@HiltAndroidTest
-@Config(application = HiltTestApplication::class)
+@RunWith(AndroidJUnit4::class)
 class PreferencesManagerImplTest {
-
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
 
     private val testDispatcher = UnconfinedTestDispatcher()
     private val testScope = TestScope(testDispatcher + Job())
     private val preferenceStore = PreferenceDataStoreFactory.create(
         scope = testScope,
         produceFile = {
-            ApplicationProvider.getApplicationContext<HiltTestApplication>()
+            ApplicationProvider.getApplicationContext<Context>()
                 .preferencesDataStoreFile("test_settings")
         })
     private val preferencesManager = PreferencesManagerImpl(preferenceStore, testDispatcher)

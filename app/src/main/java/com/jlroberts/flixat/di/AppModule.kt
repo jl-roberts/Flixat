@@ -1,6 +1,5 @@
 package com.jlroberts.flixat.di
 
-import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -16,53 +15,51 @@ import com.jlroberts.flixat.data.repository.MoviesRepositoryImpl
 import com.jlroberts.flixat.data.repository.PreferencesManagerImpl
 import com.jlroberts.flixat.domain.repository.MoviesRepository
 import com.jlroberts.flixat.domain.repository.PreferencesManager
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.OkHttpClient
-import javax.inject.Singleton
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-class AppModule {
-    @Provides
-    @Singleton
-    fun provideDatabase(@ApplicationContext application: Context): FlixatDatabase {
+object AppModule {
+
+    val appModule = module {
+        single { provideDatabase(androidContext()) }
+        single { provideImageLoader(androidContext()) }
+        single { provideDatastore(androidContext()) }
+        single { provideMoviesRepository(get(), get(), get(), get()) }
+        single { providePreferenceRepository(get(), get()) }
+        single { provideRemoteMediator(get(), get()) }
+    }
+
+    private fun provideDatabase(context: Context): FlixatDatabase {
         return Room.databaseBuilder(
-            application,
+            context,
             FlixatDatabase::class.java,
             "FlixatDatabase.db"
         ).build()
     }
 
-    @Provides
-    @Singleton
-    fun provideImageLoader(application: Application): ImageLoader {
-        return ImageLoader.Builder(application)
+    private fun provideImageLoader(context: Context): ImageLoader {
+        return ImageLoader.Builder(context)
             .crossfade(true)
             .okHttpClient {
                 OkHttpClient.Builder()
-                    .cache(CoilUtils.createDefaultCache(application))
+                    .cache(
+                        CoilUtils.createDefaultCache(context)
+                    )
                     .build()
             }.build()
     }
 
-    @Provides
-    @Singleton
-    fun provideDatastore(@ApplicationContext context: Context): DataStore<Preferences> {
+    private fun provideDatastore(context: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(produceFile = { context.preferencesDataStoreFile("settings") })
     }
 
-    @Provides
-    @Singleton
-    fun provideMoviesRepository(
+    private fun provideMoviesRepository(
         moviesApi: MoviesApi,
         database: FlixatDatabase,
         remoteMediator: MovieListRemoteMediator,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
+        ioDispatcher: CoroutineDispatcher
     ): MoviesRepository {
         return MoviesRepositoryImpl(
             moviesApi,
@@ -72,18 +69,14 @@ class AppModule {
         )
     }
 
-    @Provides
-    @Singleton
-    fun providePreferenceRepository(
+    private fun providePreferenceRepository(
         preferenceStore: DataStore<Preferences>,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
+        ioDispatcher: CoroutineDispatcher
     ): PreferencesManager {
         return PreferencesManagerImpl(preferenceStore, ioDispatcher)
     }
 
-    @Provides
-    @Singleton
-    fun provideRemoteMediator(
+    private fun provideRemoteMediator(
         database: FlixatDatabase,
         moviesApi: MoviesApi
     ): MovieListRemoteMediator {

@@ -6,7 +6,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.repository.MoviesRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,10 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class SearchViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
+class SearchViewModel constructor(private val moviesRepository: MoviesRepository) :
     ViewModel() {
 
     private var searchJob: Job? = null

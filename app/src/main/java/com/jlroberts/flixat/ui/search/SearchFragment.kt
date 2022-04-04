@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,18 +19,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import coil.ImageLoader
 import com.jlroberts.flixat.databinding.FragmentSearchBinding
 import com.jlroberts.flixat.ui.common.MovieAdapter
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    @Inject
-    lateinit var imageLoader: ImageLoader
+    val imageLoader: ImageLoader by inject()
 
-    private val viewModel by viewModels<SearchViewModel>()
+    val viewModel: SearchViewModel by viewModel()
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -48,13 +45,16 @@ class SearchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupListeners()
         setupFeedList()
         setupObservers()
         showKeyboard()
-
-        return binding.root
     }
 
     private fun setupToolbar() {

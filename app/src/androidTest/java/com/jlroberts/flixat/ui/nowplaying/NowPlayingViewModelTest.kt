@@ -1,5 +1,6 @@
 package com.jlroberts.flixat.ui.nowplaying
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.jlroberts.flixat.data.local.MovieListResultDB
 import com.jlroberts.flixat.data.repository.FakeRepository
@@ -18,9 +19,11 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@RunWith(AndroidJUnit4::class)
 class NowPlayingViewModelTest {
 
     private val dispatcher = UnconfinedTestDispatcher()

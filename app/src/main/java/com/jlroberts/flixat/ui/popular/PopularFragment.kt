@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -19,21 +19,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import coil.ImageLoader
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialFadeThrough
 import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.FragmentPopularBinding
 import com.jlroberts.flixat.ui.common.MovieAdapter
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class PopularFragment : Fragment() {
 
-    @Inject
-    lateinit var imageLoader: ImageLoader
+    val imageLoader: ImageLoader by inject()
 
-    private val viewModel by viewModels<PopularViewModel>()
+    val viewModel: PopularViewModel by viewModel()
 
     private var _binding: FragmentPopularBinding? = null
     private val binding get() = _binding!!
@@ -50,11 +49,14 @@ class PopularFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupFeedList()
         setupObservers()
-
-        return binding.root
     }
 
     private fun setupToolbar() {
@@ -64,11 +66,17 @@ class PopularFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.about -> {
-                    findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToAboutFragment())
+                    findNavController().navigate(
+                        PopularFragmentDirections
+                            .actionPopularFragmentToAboutFragment()
+                    )
                     return@setOnMenuItemClickListener true
                 }
                 R.id.preferences -> {
-                    findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToPreferenceFragment())
+                    findNavController().navigate(
+                        PopularFragmentDirections
+                            .actionPopularFragmentToPreferenceFragment()
+                    )
                     return@setOnMenuItemClickListener true
                 }
                 else -> {
@@ -94,7 +102,6 @@ class PopularFragment : Fragment() {
         binding.feedRefresh.setOnRefreshListener {
             feedAdapter.refresh()
         }
-
     }
 
     @SuppressLint("UnsafeRepeatOnLifecycleDetector")
@@ -113,7 +120,9 @@ class PopularFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 feedAdapter.loadStateFlow.collectLatest { loadState ->
-                    if (loadState.refresh is LoadState.Error || loadState.append is LoadState.Error) {
+                    if (loadState.refresh is LoadState.Error
+                        || loadState.append is LoadState.Error
+                    ) {
                         showNoNetworkSnackbar()
                     }
                 }
@@ -122,7 +131,10 @@ class PopularFragment : Fragment() {
     }
 
     private fun navigateToOnboarding() {
-        findNavController().navigate(PopularFragmentDirections.actionPopularFragmentToOnboardingFragment())
+        findNavController().navigate(
+            PopularFragmentDirections
+                .actionPopularFragmentToOnboardingFragment()
+        )
     }
 
     private fun showNoNetworkSnackbar() {
@@ -132,7 +144,7 @@ class PopularFragment : Fragment() {
         Snackbar.make(
             coordinatorLayout,
             "No internet connection, cannot refresh",
-            Snackbar.LENGTH_LONG
+            Snackbar.LENGTH_SHORT
         )
             .apply {
                 anchorView = fab

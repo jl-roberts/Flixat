@@ -1,22 +1,20 @@
 package com.jlroberts.flixat.data.paging
 
 import androidx.paging.PagingSource
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jlroberts.flixat.data.remote.MockMovieApi
 import com.jlroberts.flixat.data.remote.model.RemoteMovieListResponse
 import com.jlroberts.flixat.data.remote.model.RemoteMovieListResult
 import com.jlroberts.flixat.data.remote.model.asDomainModel
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.robolectric.annotation.Config
+import org.junit.runner.RunWith
 
-@HiltAndroidTest
-@Config(application = HiltTestApplication::class)
 @OptIn(ExperimentalCoroutinesApi::class)
+@RunWith(AndroidJUnit4::class)
 class SearchPagingSourceTest {
 
     private val mockMovies = RemoteMovieListResponse(

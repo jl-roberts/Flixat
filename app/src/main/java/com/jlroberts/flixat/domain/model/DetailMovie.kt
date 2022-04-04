@@ -1,10 +1,7 @@
 package com.jlroberts.flixat.domain.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import java.util.*
 
-@Parcelize
 data class DetailMovie(
     val adult: Boolean = false,
     val backdropPath: Image? = null,
@@ -31,4 +28,4 @@ data class DetailMovie(
     val similar: List<MovieListResult>?,
     val watchProviders: List<WatchProvider>?,
     val externalIds: ExternalID
-) : Parcelable
+)

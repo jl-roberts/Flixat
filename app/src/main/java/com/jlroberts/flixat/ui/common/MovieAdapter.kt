@@ -16,6 +16,7 @@ class MovieAdapter(
     private val listener: (MovieListResult) -> Unit
 ) :
     PagingDataAdapter<MovieListResult, MovieAdapter.ViewHolder>(MovieComparator) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }

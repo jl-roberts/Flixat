@@ -9,24 +9,21 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.jlroberts.flixat.databinding.FragmentOnboardingBinding
 import com.jlroberts.flixat.domain.repository.PreferencesManager
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-@AndroidEntryPoint
 class OnboardingFragment : Fragment() {
 
     private var _binding: FragmentOnboardingBinding? = null
     private val binding get() = _binding!!
 
-    @Inject
-    lateinit var preferencesManager: PreferencesManager
+    val preferencesManager: PreferencesManager by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentOnboardingBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
 

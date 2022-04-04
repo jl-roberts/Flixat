@@ -2,7 +2,6 @@ package com.jlroberts.flixat.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
-import com.jlroberts.flixat.di.IoDispatcher
 import com.jlroberts.flixat.domain.repository.PreferencesManager
 import com.jlroberts.flixat.ui.preferences.Theme
 import com.jlroberts.flixat.utils.THEME_AUTO
@@ -18,7 +17,7 @@ import java.io.IOException
 
 class PreferencesManagerImpl(
     private val preferenceStore: DataStore<Preferences>,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher
 ) :
     PreferencesManager {
 
@@ -118,5 +117,11 @@ class PreferencesManagerImpl(
         }.map { preferences ->
             preferences[ONBOARDING_COMPLETE] ?: false
         }.flowOn(dispatcher)
+    }
+
+    override suspend fun clearAll() {
+        preferenceStore.edit {
+            it.clear()
+        }
     }
 }

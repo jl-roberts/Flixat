@@ -9,9 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.jlroberts.flixat.databinding.FragmentAboutBinding
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class AboutFragment : Fragment() {
 
     private var _binding: FragmentAboutBinding? = null
@@ -21,7 +19,7 @@ class AboutFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAboutBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
 

@@ -19,4 +19,10 @@
     <string name="no_connection">No internet connection, please retry.</string>
     <string name="retry">Retry</string>
     <string name="continue_text">Continue</string>
+    <string name="about_flixat_text">Flixat was created by James Roberts. Source for the application can be found at www.github.com/jl-roberts. You can find me at www.twitter.com/xoomdev.</string>
+    <string name="about_tmdb_text">Flixat is powered by The Movie Database for movie data. Visit them at www.themoviedb.org for more information.</string>
+    <string name="about_just_watch_text">Watch provider information provided by TMDb is powered by JustWatch. Visit them at www.justwatch.com</string>
+    <string name="no_internet_connection">No internet connection, please retry.</string>
+    <string name="about">About</string>
+    <string name="preferences">Preferences</string>
 </resources>

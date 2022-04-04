@@ -1,11 +1,9 @@
 package com.jlroberts.flixat.ui.detail
 
-import androidx.lifecycle.SavedStateHandle
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.jlroberts.flixat.data.remote.model.*
 import com.jlroberts.flixat.data.repository.FakeRepository
-import io.mockk.every
-import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -16,16 +14,17 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@RunWith(AndroidJUnit4::class)
 class DetailViewModelTest {
 
     private val dispatcher = UnconfinedTestDispatcher()
     private val movieId = 1
 
     private lateinit var viewModel: DetailViewModel
-    private val savedStateHandle = mockk<SavedStateHandle>()
     private val repository = FakeRepository()
 
     private val remoteDetailMovie = RemoteDetailMovie(
@@ -105,9 +104,8 @@ class DetailViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
-        every { savedStateHandle.get<Int>("movieId") } returns movieId
         repository.setDetailMovie(remoteDetailMovie)
-        viewModel = DetailViewModel(repository, savedStateHandle, dispatcher)
+        viewModel = DetailViewModel(movieId, repository, dispatcher)
     }
 
     @After

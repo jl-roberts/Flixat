@@ -8,4 +8,8 @@
     <style name="DetailToolbar" parent="ThemeOverlay.Material3">
         <item name="colorControlNormal">?attr/colorOnPrimarySurface</item>
     </style>
+
+    <style name="DetailLabelStyle" parent="Theme.Flixat">
+        <item name="android:textAppearance">@style/TextAppearance.Material3.TitleLarge</item>
+    </style>
 </resources>

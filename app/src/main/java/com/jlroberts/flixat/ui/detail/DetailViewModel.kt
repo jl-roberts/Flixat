@@ -1,33 +1,26 @@
 package com.jlroberts.flixat.ui.detail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jlroberts.flixat.data.remote.model.asDomainModel
-import com.jlroberts.flixat.di.DefaultDispatcher
 import com.jlroberts.flixat.domain.repository.MoviesRepository
 import com.jlroberts.flixat.utils.DETAIL_RESPONSES_TO_APPEND
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import logcat.logcat
 import java.io.IOException
-import javax.inject.Inject
 
 @OptIn(InternalCoroutinesApi::class)
-@HiltViewModel
-class DetailViewModel @Inject constructor(
+class DetailViewModel(
+    private val movieId: Int,
     private val moviesRepository: MoviesRepository,
-    private val savedStateHandle: SavedStateHandle,
-    @DefaultDispatcher private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DetailState())
     val state = _state.asStateFlow()
-
-    private val movieId: Int? = savedStateHandle["movieId"]
 
     init {
         getDetailMovie()
@@ -36,7 +29,7 @@ class DetailViewModel @Inject constructor(
     private fun getDetailMovie() {
         viewModelScope.launch {
             moviesRepository.getMovieById(
-                movieId!!,
+                movieId,
                 DETAIL_RESPONSES_TO_APPEND
             ).map { it?.asDomainModel() }
                 .flowOn(dispatcher)

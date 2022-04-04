@@ -2,4 +2,9 @@
 <resources>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="detail_error_size">300dp</dimen>
+    <dimen name="backdrop_height">325dp</dimen>
+    <dimen name="centered_button_margin">48dp</dimen>
+    <dimen name="preference_height">72dp</dimen>
 </resources>

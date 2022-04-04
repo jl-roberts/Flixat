@@ -5,28 +5,25 @@ import com.jlroberts.flixat.data.remote.MoviesApi
 import com.jlroberts.flixat.utils.TMDB_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-class NetworkModule {
-    @Provides
-    @Singleton
-    fun provideMoshi(): Moshi {
+object NetworkModule {
+
+    val networkModule = module {
+        factory { provideMoshi() }
+        factory { provideOkHttpClient() }
+        factory { provideMoviesApi(get(), get()) }
+    }
+
+    private fun provideMoshi(): Moshi {
         return Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
     }
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    private fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder().apply {
             addInterceptor { chain ->
                 val request = chain.request().newBuilder()
@@ -45,9 +42,7 @@ class NetworkModule {
         }.build()
     }
 
-    @Provides
-    @Singleton
-    fun provideMoviesApi(client: OkHttpClient, moshi: Moshi): MoviesApi {
+    private fun provideMoviesApi(client: OkHttpClient, moshi: Moshi): MoviesApi {
         return Retrofit.Builder()
             .baseUrl(TMDB_URL)
             .client(client)

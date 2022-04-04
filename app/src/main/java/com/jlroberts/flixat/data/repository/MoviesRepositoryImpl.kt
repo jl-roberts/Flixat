@@ -12,7 +12,6 @@ import com.jlroberts.flixat.data.paging.NowPlayingPagingSource
 import com.jlroberts.flixat.data.paging.SearchPagingSource
 import com.jlroberts.flixat.data.remote.MoviesApi
 import com.jlroberts.flixat.data.remote.model.RemoteDetailMovie
-import com.jlroberts.flixat.di.IoDispatcher
 import com.jlroberts.flixat.domain.model.MovieListResult
 import com.jlroberts.flixat.domain.repository.MoviesRepository
 import com.jlroberts.flixat.utils.MOVIES_PAGE_SIZE
@@ -26,7 +25,7 @@ class MoviesRepositoryImpl(
     private val moviesApi: MoviesApi,
     private val database: FlixatDatabase,
     private val remoteMediator: MovieListRemoteMediator,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher
 ) : MoviesRepository {
 
     @OptIn(ExperimentalPagingApi::class)

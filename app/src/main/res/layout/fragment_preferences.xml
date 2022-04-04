@@ -41,15 +41,15 @@
                 <LinearLayout
                     android:id="@+id/country_preference_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="72dp"
+                    android:layout_height="@dimen/preference_height"
                     android:orientation="vertical">
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TextAppearance.Material3.BodyLarge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:text="@string/country_preference"
                         android:textStyle="bold" />
 
@@ -57,22 +57,22 @@
                         android:id="@+id/country_preference_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginStart="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_small" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/theme_preference_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="72dp"
+                    android:layout_height="@dimen/preference_height"
                     android:orientation="vertical">
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TextAppearance.Material3.BodyLarge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:text="@string/theme_settings_preference"
                         android:textStyle="bold" />
 
@@ -80,8 +80,8 @@
                         android:id="@+id/theme_settings_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginStart="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_small" />
                 </LinearLayout>
             </LinearLayout>
 

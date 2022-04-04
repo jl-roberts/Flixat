@@ -1,41 +1,15 @@
 package com.jlroberts.flixat.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Qualifier
-import javax.inject.Singleton
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-class DispatcherModule {
-    @DefaultDispatcher
-    @Provides
-    @Singleton
-    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
-    @IoDispatcher
-    @Provides
-    @Singleton
-    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+object DispatcherModule {
 
-    @MainDispatcher
-    @Provides
-    @Singleton
-    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+    val dispatcherModule = module {
+        factory { providesIoDispatcher() }
+    }
+
+    private fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class DefaultDispatcher
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class IoDispatcher
-
-@Retention(AnnotationRetention.BINARY)
-@Qualifier
-annotation class MainDispatcher

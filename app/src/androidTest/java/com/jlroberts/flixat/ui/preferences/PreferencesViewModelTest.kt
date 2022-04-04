@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.jlroberts.flixat.data.repository.PreferencesManagerImpl
-import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -16,10 +16,12 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.io.File
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class, kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+@RunWith(AndroidJUnit4::class)
 class PreferencesViewModelTest {
 
     private val dispatcher = UnconfinedTestDispatcher()
@@ -29,7 +31,7 @@ class PreferencesViewModelTest {
     private val preferenceStore = PreferenceDataStoreFactory.create(
         scope = testScope,
         produceFile = {
-            ApplicationProvider.getApplicationContext<HiltTestApplication>()
+            ApplicationProvider.getApplicationContext<Context>()
                 .preferencesDataStoreFile("test_settings")
         })
     private val preferencesManager = PreferencesManagerImpl(preferenceStore, dispatcher)

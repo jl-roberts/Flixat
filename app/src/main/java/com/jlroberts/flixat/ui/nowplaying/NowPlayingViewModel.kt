@@ -5,15 +5,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.jlroberts.flixat.domain.repository.MoviesRepository
 import com.jlroberts.flixat.domain.repository.PreferencesManager
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class NowPlayingViewModel @Inject constructor(
+class NowPlayingViewModel constructor(
     private val moviesRepository: MoviesRepository,
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {

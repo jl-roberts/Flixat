@@ -34,7 +34,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:layout_margin="8dp"
+                    android:layout_margin="@dimen/margin_small"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="5dp">
 
@@ -42,7 +42,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="8dp"
+                        android:layout_margin="@dimen/margin_small"
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -53,17 +53,17 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
+                            android:layout_marginStart="@dimen/margin_normal"
                             android:autoLink="web"
                             android:linksClickable="true"
-                            android:text="Flixat was created by James Roberts. Source for the application can be found at www.github.com/jl-roberts. You can find me at www.twitter.com/xoomdev." />
+                            android:text="@string/about_flixat_text" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:layout_margin="8dp"
+                    android:layout_margin="@dimen/margin_small"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="5dp">
 
@@ -71,7 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="8dp"
+                        android:layout_margin="@dimen/margin_small"
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -82,18 +82,18 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="@dimen/margin_normal"
+                            android:layout_marginTop="@dimen/margin_small"
                             android:autoLink="web"
                             android:linksClickable="true"
-                            android:text="Flixat is powered by The Movie Database for movie data. Visit them at www.themoviedb.org for more information." />
+                            android:text="@string/about_tmdb_text" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:layout_margin="8dp"
+                    android:layout_margin="@dimen/margin_small"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="5dp">
 
@@ -101,7 +101,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="8dp"
+                        android:layout_margin="@dimen/margin_small"
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -116,7 +116,7 @@
                             android:layout_marginStart="36dp"
                             android:autoLink="web"
                             android:linksClickable="true"
-                            android:text="Watch provider information provided by TMDb is powered by JustWatch. Visit them at www.justwatch.com" />
+                            android:text="@string/about_just_watch_text" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>

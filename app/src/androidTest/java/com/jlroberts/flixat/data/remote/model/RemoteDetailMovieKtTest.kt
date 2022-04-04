@@ -1,15 +1,14 @@
 package com.jlroberts.flixat.data.remote.model
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jlroberts.flixat.domain.model.Image
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.robolectric.annotation.Config
+import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
 import java.util.*
 
-@HiltAndroidTest
-@Config(application = HiltTestApplication::class)
+@RunWith(AndroidJUnit4::class)
 class RemoteDetailMovieKtTest {
 
     @Test
@@ -88,13 +87,18 @@ class RemoteDetailMovieKtTest {
         )
 
         val result = remoteDetailMovie.asDomainModel()
-        assert(result.backdropPath == remoteDetailMovie.backdropPath?.let { Image(url = it) })
-        assert(result.releaseDate == remoteDetailMovie.releaseDate.let {
-            SimpleDateFormat("yyyy-mm-dd", Locale.getDefault()).parse(it)
-        })
-        assert(result.posterPath == remoteDetailMovie.posterPath?.let { Image(url = it) })
-        assert(result.videos?.size == 1)
-        assert(result.videos?.first()?.site == "YouTube")
-        assert(result.videos?.first()?.type == "Trailer")
+
+        assertEquals(remoteDetailMovie.backdropPath?.let { Image(url = it) }, result.backdropPath)
+        assertEquals(remoteDetailMovie.releaseDate.let {
+            SimpleDateFormat(
+                "yyyy-mm-dd",
+                Locale.getDefault()
+            ).parse(it)
+        }, result.releaseDate)
+
+        assertEquals(remoteDetailMovie.posterPath?.let { Image(url = it) }, result.posterPath)
+        assertEquals(1, result.videos?.size)
+        assertEquals("YouTube", result.videos?.first()?.site)
+        assertEquals("Trailer", result.videos?.first()?.type)
     }
 }

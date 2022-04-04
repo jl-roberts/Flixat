@@ -13,4 +13,5 @@ interface PreferencesManager {
     suspend fun getTheme(): Flow<Theme>
     suspend fun getOnboardingStatus(): Flow<Boolean>
     suspend fun setOnboardingComplete()
+    suspend fun clearAll()
 }
