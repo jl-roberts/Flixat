@@ -7,4 +7,6 @@
     <dimen name="backdrop_height">325dp</dimen>
     <dimen name="centered_button_margin">48dp</dimen>
     <dimen name="preference_height">72dp</dimen>
+    <dimen name="standard_corner_radius">8dp</dimen>
+    <dimen name="about_card_height">100dp</dimen>
 </resources>
