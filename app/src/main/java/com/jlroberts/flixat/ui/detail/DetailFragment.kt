@@ -16,6 +16,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.appbar.AppBarLayout
+import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.FragmentDetailBinding
 import com.jlroberts.flixat.domain.model.DetailMovie
 import com.jlroberts.flixat.utils.useClearStatusBar
@@ -90,13 +91,14 @@ class DetailFragment : Fragment() {
                 onSuccess = { _, _ ->
                     binding.backdropScrim.visibility = View.VISIBLE
                 })
-            .crossfade(true)
-            .crossfade(200)
+            .placeholder(R.drawable.ic_placeholder)
+            .error(R.drawable.ic_error)
             .build()
         val poster = ImageRequest.Builder(binding.movieImage.context)
             .data(movie?.posterPath?.large)
             .target(binding.movieImage)
-            .crossfade(true)
+            .placeholder(R.drawable.ic_placeholder_portrait)
+            .error(R.drawable.ic_error)
             .transformations(RoundedCornersTransformation(20f))
             .build()
         imageLoader.enqueue(backdrop)

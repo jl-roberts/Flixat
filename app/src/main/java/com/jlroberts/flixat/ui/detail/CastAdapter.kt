@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.RvCastBinding
 import com.jlroberts.flixat.domain.model.CastMember
 
@@ -29,7 +30,8 @@ class CastAdapter(private val imageLoader: ImageLoader) :
             val request = ImageRequest.Builder(binding.profilePicture.context)
                 .data(item.profilePath?.medium)
                 .target(binding.profilePicture)
-                .crossfade(true)
+                .placeholder(R.drawable.ic_placeholder_portrait)
+                .error(R.drawable.ic_error)
                 .transformations(CircleCropTransformation())
                 .build()
             imageLoader.enqueue(request)

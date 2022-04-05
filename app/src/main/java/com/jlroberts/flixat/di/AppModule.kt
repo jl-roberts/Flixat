@@ -40,8 +40,8 @@ object AppModule {
     }
 
     private fun provideImageLoader(context: Context): ImageLoader {
+
         return ImageLoader.Builder(context)
-            .crossfade(true)
             .okHttpClient {
                 OkHttpClient.Builder()
                     .cache(

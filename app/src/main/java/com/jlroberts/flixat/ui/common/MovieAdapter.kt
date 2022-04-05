@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
+import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.RvMovieBinding
 import com.jlroberts.flixat.domain.model.MovieListResult
 
@@ -36,8 +37,9 @@ class MovieAdapter(
             val request = ImageRequest.Builder(binding.movieImage.context)
                 .data(item.posterPath?.large)
                 .target(binding.movieImage)
+                .placeholder(R.drawable.ic_placeholder_portrait)
+                .error(R.drawable.ic_error)
                 .transformations(RoundedCornersTransformation(20f))
-                .crossfade(true)
                 .build()
             imageLoader.enqueue(request)
             binding.executePendingBindings()

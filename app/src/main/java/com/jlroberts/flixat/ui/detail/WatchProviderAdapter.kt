@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
+import com.jlroberts.flixat.R
 import com.jlroberts.flixat.databinding.RvWatchProviderBinding
 import com.jlroberts.flixat.domain.model.WatchProvider
 
@@ -29,7 +30,8 @@ class WatchProviderAdapter(private val imageLoader: ImageLoader) :
             val request = ImageRequest.Builder(binding.logo.context)
                 .data(item.logoPath.medium)
                 .target(binding.logo)
-                .crossfade(true)
+                .placeholder(R.drawable.ic_placeholder_portrait)
+                .error(R.drawable.ic_error)
                 .transformations(RoundedCornersTransformation(12f))
                 .build()
             imageLoader.enqueue(request)
